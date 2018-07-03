@@ -65,6 +65,10 @@ dkms.conf
 # BFT binary and generated files
 *.bft
 
+bin
+build
+CMakeCache.txt
+CMakeFiles
 Makefile
 autom4te.cache/
 *~
