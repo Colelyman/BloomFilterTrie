@@ -13,7 +13,7 @@
 #include "kseq.h"
 KSEQ_INIT(int, read)
 
-#include "UC_annotation.h"
+//#include "UC_annotation.h"
 #include "insertNode.h"
 #include "printMemory.h"
 #include "fasta.h"
