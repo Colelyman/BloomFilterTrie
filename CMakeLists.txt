@@ -9,12 +9,15 @@ set(LIBRARY_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 add_library(bft "")
+add_executable(bft-bin "")
+target_link_libraries(bft-bin bft)
+set_target_properties(bft-bin
+  PROPERTIES OUTPUT_NAME bft)
 
 set(PROJECT_JUDY_PATH ${CMAKE_BINARY_DIR}/judy-1.0.5)
 ExternalProject_Add(project_judy
   URL https://downloads.sourceforge.net/project/judy/judy/Judy-1.0.5/Judy-1.0.5.tar.gz
   PREFIX ${PROJECT_JUDY_PATH}
-  # PREFIX=${PROJECT_JUDY_PATH}
   CONFIGURE_COMMAND ${PROJECT_JUDY_PATH}/src/project_judy/configure --prefix=${PROJECT_JUDY_PATH}
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ${MAKE}
@@ -32,7 +35,6 @@ set(PROJECT_JEMALLOC_PATH ${CMAKE_BINARY_DIR}/jemalloc-5.1.0)
 ExternalProject_Add(project_jemalloc
   URL https://github.com/jemalloc/jemalloc/releases/download/5.1.0/jemalloc-5.1.0.tar.bz2
   PREFIX ${PROJECT_JEMALLOC_PATH}
-  # PREFIX=${PROJECT_JEMALLOC_PATH}
   CONFIGURE_COMMAND ${PROJECT_JEMALLOC_PATH}/src/project_jemalloc/configure --prefix=${PROJECT_JEMALLOC_PATH}
   BUILD_IN_SOURCE TRUE
   BUILD_COMMAND ${MAKE}
