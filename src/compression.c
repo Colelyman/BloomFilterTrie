@@ -4603,8 +4603,8 @@ void insert_kmers_partitions2(char* output_prefix, int size_seed, int size_kmer,
         root_no_IUPAC = createBFT_Root(size_kmer, 1, 1);
         root_IUPAC = createBFT_Root(size_kmer * 2, 1, 1);
 
-        root_no_IUPAC->ann_inf = create_annotation_inform(-1);
-        root_IUPAC->ann_inf = create_annotation_inform(-1);
+        root_no_IUPAC->ann_inf = create_annotation_inform(-1, false);
+        root_IUPAC->ann_inf = create_annotation_inform(-1, false);
 
         for (i = 0; i < size_kmer / NB_CHAR_SUF_PREF; i++){
             root_no_IUPAC->info_per_lvl[i].nb_ucs_skp = 8;
@@ -5186,7 +5186,7 @@ void create_subgraph_decomp(char* output_prefix, FILE* file_partitions, Pvoid_t*
     strcpy(output_prefix_buffer, output_prefix);
 
     new_graph_no_iupac = createBFT_Root((*graph_no_iupac)->k, 1, 1);
-    new_graph_no_iupac->ann_inf = create_annotation_inform(-1);
+    new_graph_no_iupac->ann_inf = create_annotation_inform(-1, false);
 
     for (int i = 0; i <= lvl_root_no_iupac; i++){
         new_graph_no_iupac->info_per_lvl[i].nb_ucs_skp = 8;
@@ -5197,7 +5197,7 @@ void create_subgraph_decomp(char* output_prefix, FILE* file_partitions, Pvoid_t*
     }
 
     new_graph_iupac = createBFT_Root((*graph_iupac)->k, 1, 1);
-    new_graph_iupac->ann_inf = create_annotation_inform(-1);
+    new_graph_iupac->ann_inf = create_annotation_inform(-1, false);
 
     for (int i = 0; i <= lvl_root_iupac; i++){
         new_graph_iupac->info_per_lvl[i].nb_ucs_skp = 8;
