@@ -7,76 +7,73 @@ compress and index shared substrings. A typical application of the BFT is pan-ge
 
 In order to compile and use the BFT, you need a machine running a 64 bits Linux or Mac OS operating system, POSIX compliant and accepting SSE4 instructions.
 
-The library depends on two external libraries: Judy Arrays (http://judy.sourceforge.net) and Jemalloc (http://www.canonware.com/jemalloc).
-
-Both can be downloaded and installed by following the instructions on their respective websites. It is however most likely that at least few of them are available via a package manager for your operating system.
-
-If you operating system is Ubuntu or Debian:
-```
-sudo apt-get install libjudydebian1 libjudy-dev libjemalloc1 libjemalloc-dev
-```
-
-If you operating system is Mac OS, Jemalloc can be easily downloaded and installed via Homebrew:
-```
-brew install jemalloc
-```
+The library depends on three external libraries: CMake (https://cmake.org/), Judy Arrays
+(http://judy.sourceforge.net) and Jemalloc (http://www.canonware.com/jemalloc).
+These libraries will automatically be downloaded and installed for you via CMake
+(no super-user privileges required).
 
 ## Compilation and installation
 
-The library compiles with GNU GCC and G++ (compatibility with Clang is in preparation). It successfully compiles and runs on Ubuntu 14.04 and 15.04.
+The library compiles with GNU GCC, G++, and Clang. It successfully compiles and
+runs on Ubuntu 14.04 and 15.04 and Mac OS X 10.13.5. The minimum version of
+CMake that is needed is 3.1.
 
 ### Linux
 
-On Linux, you can verify the presence of gcc and g++ on your system with:
+On Linux, you can verify the presence of cmake, gcc and g++ on your system with:
 ```
+cmake --version
 gcc -v
 g++ -v
 ```
 
 If not present (unlikely), they can be installed for Ubuntu or Debian with:
 ```
-sudo apt-get install build-essential
+sudo apt-get install build-essential cmake
 ```
-
-Compiling the library should then be as simple as:
-```
-cd <BFT_directory>
-./configure
-make
-make install
-```
-
-You can also install it in a specific directory (for example because you are not root on the machine you are using) with:
-```
-cd <BFT_directory>
-./configure --prefix=<some_directory>
-make
-make install
-```
-
-Make sure that the environment variables PATH, LIBRARY_PATH, LD_LIBRARY_PATH and C_INCLUDE_PATH are set with *\<some_directory\>*.
 
 ### Mac OS
 
-For Mac OS, you will need the "real" GCC and G++, not the Clang interface that is called when you use GCC or G++. Both can be installed via Homebrew:
+You can optionally install the "real" GCC and G++, or use the default Clang
+interface (most likely) already installed on your system. You can install cmake
+via Homebrew (https://brew.sh/):
 ```
-brew install gcc-x
-brew install g++-x
+brew install cmake
 ```
 
-in which *x* is the latest major version of GCC and G++.
+If you want to install the "real" GCC and G++, run:
+```
+brew install gcc-x
+brew install gcc-x
+```
+
+where `x` is the latest major version of GCC and G++ (on 7/2018 `x == 8`). If
+you would like to use these installed compilers to install BFT, modify the
+`cmake ..` command below to `cmake .. -DCMAKE_C_COMPILER=$(which gcc-x)` (again
+with `x` replaced with the version number).
+
+### Mac OS X and Linux
 
 Compiling the library should then be as simple as:
 ```
 cd <BFT_directory>
-./configure CC=gcc-x
+mkdir build && cd build
+cmake ..
 make
-make install
 ```
 
-in which *x* is the version of GCC and G++ that you installed via Homebrew or other.
+The above command will result in the creation of a directory
+`<BFT_directory>/bin` which will contain the binary executable `bft`, the shared
+library `bft_shared.so` (on Linux or `bft_shared.dylib` on Mac OS X), and the
+static library `bft_static.a`.
 
-To install the BFT library in a specific directory, see Linux compilation and installation.
+Make sure that the environment variables PATH, LIBRARY_PATH, LD_LIBRARY_PATH and
+C_INCLUDE_PATH are set with *\<BFT_directory\>/bin* in order to use BFT outside
+of `<BFT_directory>`. You can also install onto your system by running:
+```
+sudo make install
+```
+
 
 ## API Usage
 
@@ -88,8 +85,10 @@ Once the library is installed on your system, just use
 ```
 in your C code. Then, use the following flag for linking:
 ```
--lbft
+-lbft_(static|shared)
 ```
+meaning either `-lbft_static` or `-lbft_shared` depending on if you want to use
+the static or shared library.
 
 ### C++
 
@@ -101,12 +100,23 @@ extern "C" {
 ```
 in your C++ code. Then, use the following flag for linking:
 ```
--lbft
+-lbft_(static|shared)
 ```
 and the following flag for compiling:
 ```
 -fpermissive
 ```
+
+### Non-default installations
+
+If you don't have super-user privileges (or you just chose not to run `sudo make
+install`) then you will need to add the following argument when you compile:
+```
+-L<BFT_directory/bin
+```
+
+this allows the compiler to find the BFT libraries. *NOTE:* make sure that you
+place this _after_ the `-lbft_(shared|static)`.
 
 ## API documentation:
 
