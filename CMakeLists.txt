@@ -35,6 +35,9 @@ target_include_directories(bft PUBLIC "${CMAKE_SOURCE_DIR}/include")
 include(${CMAKE_SOURCE_DIR}/src/CMakeLists.txt)
 include(${CMAKE_SOURCE_DIR}/include/CMakeLists.txt)
 
+# Set the proper installation directory
+install(TARGETS bft_bin bft_static bft_shared DESTINATION ${CMAKE_INSTALL_PREFIX})
+
 # DEPENDENCIES
 # Judy Arrays
 set(PROJECT_JUDY_PATH ${CMAKE_BINARY_DIR}/judy-1.0.5)
