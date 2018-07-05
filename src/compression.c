@@ -9,7 +9,7 @@ uint32_t compress_FASTx_files(char* filename_read_1, char* filename_read_2, bool
 
     int len_output_prefix = strlen(output_prefix);
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers() 2\n")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -52,7 +52,7 @@ void decompress_FASTx_file(char* output_prefix, bool pair_ended, int size_kmer, 
 
     int len_output_prefix = strlen(output_prefix);
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers() 2\n")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -120,7 +120,7 @@ size_t insert_kmer_into_bf(BloomFilter* bloom_filter, char* kmer, int length_kme
 
 BloomFilter* create_BloomFilter(uint64_t nb_elem, double fp_rate_max){
 
-    BloomFilter* bloom_filter = malloc(sizeof(BloomFilter));
+    BloomFilter* bloom_filter = (BloomFilter*) malloc(sizeof(BloomFilter));
     ASSERT_NULL_PTR(bloom_filter, "create_BloomFilter()\n")
 
     bloom_filter->size_block_bytes = SIZE_BLOCK_BYTES;
@@ -154,7 +154,7 @@ BloomFilter* create_BloomFilter(uint64_t nb_elem, double fp_rate_max){
     bloom_filter->seed_hash1 = rand();
     while (bloom_filter->seed_hash1 == (bloom_filter->seed_hash2 = rand())){};
 
-    bloom_filter->bf = calloc(bloom_filter->nb_bytes_bf, sizeof(uint8_t));
+    bloom_filter->bf = (uint8_t*) calloc(bloom_filter->nb_bytes_bf, sizeof(uint8_t));
     ASSERT_NULL_PTR(bloom_filter->bf,"create_BloomFilter()\n")
 
     return bloom_filter;
@@ -206,13 +206,13 @@ int64_t binning_reads(char* filename_reads_mate_1, char* filename_reads_mate_2, 
     char* info_read_non_rev = " 0";
     char* info_read_rev = " 1";
 
-    uint8_t* id_minimizer = malloc(size_minimizer_bytes * sizeof(uint8_t));
+    uint8_t* id_minimizer = (uint8_t*) malloc(size_minimizer_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(id_minimizer, "binning_reads()\n")
 
-    char* bin_name = malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
+    char* bin_name = (char*) malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
     ASSERT_NULL_PTR(bin_name, "binning_reads()\n")
 
-    char* buffer_read_rev = malloc(length_buffer_read_rev * sizeof(char));
+    char* buffer_read_rev = (char*) malloc(length_buffer_read_rev * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_rev, "binning_reads()\n")
 
     strcpy(bin_name, prefix_bin_name);
@@ -281,7 +281,7 @@ int64_t binning_reads(char* filename_reads_mate_1, char* filename_reads_mate_2, 
 
             length_buffer_read_rev = length_read + 1;
 
-            buffer_read_rev = realloc(buffer_read_rev, length_buffer_read_rev * sizeof(char));
+            buffer_read_rev = (char*) realloc(buffer_read_rev, length_buffer_read_rev * sizeof(char));
             ASSERT_NULL_PTR(buffer_read_rev, "binning_reads()\n")
         }
 
@@ -485,16 +485,16 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
     char* delimiter;
     char* read;
 
-    char* bin_name = malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
+    char* bin_name = (char*) malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
     ASSERT_NULL_PTR(bin_name, "binning_reads()\n")
 
-    char* buffer_read = malloc(size_buffer_read * sizeof(char));
+    char* buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "binning_reads()\n")
 
-    char** array_reads = malloc(size_array_reads * sizeof(char*));
+    char** array_reads = (char**) malloc(size_array_reads * sizeof(char*));
     ASSERT_NULL_PTR(array_reads, "binning_reads()\n")
 
-    mis = malloc(nb_mis_max * sizeof(Mismatch));
+    mis = (Mismatch*) malloc(nb_mis_max * sizeof(Mismatch));
     ASSERT_NULL_PTR(mis, "binning_reads()\n")
 
     strcpy(bin_name, prefix_bin_name);
@@ -519,7 +519,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
                     delimiter[length_delimiter] = '\0';
                 }
 
-                read = malloc((length_delimiter + 1) * sizeof(char));
+                read = (char*) malloc((length_delimiter + 1) * sizeof(char));
                 ASSERT_NULL_PTR(read, "binning_reads()\n")
 
                 strcpy(read, delimiter);
@@ -553,7 +553,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
 
                     size_array_reads = list_count;
 
-                    array_reads = realloc(array_reads, size_array_reads * sizeof(char*));
+                    array_reads = (char**) realloc(array_reads, size_array_reads * sizeof(char*));
                     ASSERT_NULL_PTR(array_reads, "binning_reads()\n")
                 }
 
@@ -594,7 +594,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
 
                             if (match){
 
-                                read_count->list_mismatches = realloc(read_count->list_mismatches, (read_count->nb_mismatches + match) * sizeof(Mismatch));
+                                read_count->list_mismatches = (Mismatch*) realloc(read_count->list_mismatches, (read_count->nb_mismatches + match) * sizeof(Mismatch));
                                 ASSERT_NULL_PTR(read_count->list_mismatches, "binning_reads()\n")
 
                                 memcpy(&(read_count->list_mismatches[read_count->nb_mismatches]), mis, match * sizeof(Mismatch));
@@ -615,7 +615,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
                 }
                 else{
 
-                    read_count->id_occ = malloc(sizeof(int64_t));
+                    read_count->id_occ = (int64_t*) malloc(sizeof(int64_t));
                     ASSERT_NULL_PTR(read_count->id_occ, "binning_reads()\n")
 
                     delimiter = strchr(strchr(read_count->read, ' ') + 1, ' ');
@@ -644,14 +644,14 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
 
                             read_count->occ_count += 1;
 
-                            read_count->id_occ = realloc(read_count->id_occ, read_count->occ_count * sizeof(int64_t));
+                            read_count->id_occ = (int64_t*) realloc(read_count->id_occ, read_count->occ_count * sizeof(int64_t));
                             ASSERT_NULL_PTR(read_count->id_occ, "binning_reads()\n")
 
                             read_count->id_occ[read_count->occ_count - 1] = (int64_t) strtoll(delimiter, &delimiter, 10);
 
                             if (match){
 
-                                read_count->list_mismatches = realloc(read_count->list_mismatches, (read_count->nb_mismatches + match) * sizeof(Mismatch));
+                                read_count->list_mismatches = (Mismatch*) realloc(read_count->list_mismatches, (read_count->nb_mismatches + match) * sizeof(Mismatch));
                                 ASSERT_NULL_PTR(read_count->list_mismatches, "binning_reads()\n")
 
                                 memcpy(&(read_count->list_mismatches[read_count->nb_mismatches]), mis, match * sizeof(Mismatch));
@@ -668,7 +668,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
                             read_count->read = array_reads[it_list];
                             read_count->occ_count = 1;
 
-                            read_count->id_occ = malloc(sizeof(int64_t));
+                            read_count->id_occ = (int64_t*) malloc(sizeof(int64_t));
                             ASSERT_NULL_PTR(read_count->id_occ, "binning_reads()\n")
 
                             read_count->id_occ[0] = (int64_t) strtoll(delimiter, &delimiter, 10);
@@ -769,7 +769,7 @@ void create_super_reads(char* prefix_bin_name, bool pair_ended, int size_minimiz
 
                                 if (match){
 
-                                    pos_length_occ->list_mismatches = realloc(pos_length_occ->list_mismatches, (pos_length_occ->nb_mismatches + match) * sizeof(Mismatch));
+                                    pos_length_occ->list_mismatches = (Mismatch*) realloc(pos_length_occ->list_mismatches, (pos_length_occ->nb_mismatches + match) * sizeof(Mismatch));
                                     ASSERT_NULL_PTR(pos_length_occ->list_mismatches, "create_super_reads()\n")
 
                                     memcpy(&(pos_length_occ->list_mismatches[pos_length_occ->nb_mismatches]), mis, match * sizeof(Mismatch));
@@ -988,22 +988,22 @@ uint64_t create_spanning_super_reads(char* prefix_bin_name, bool pair_ended, int
 
     char* curr_minimizer;
 
-    uint8_t* id_minimizer = malloc(size_minimizer_bytes * sizeof(uint8_t));
+    uint8_t* id_minimizer = (uint8_t*) malloc(size_minimizer_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(id_minimizer, "create_spanning_super_reads()\n")
 
-    char* bin_name = malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
+    char* bin_name = (char*) malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
     ASSERT_NULL_PTR(bin_name, "create_spanning_super_reads()\n")
 
-    char* buffer_read = malloc(size_buffer_read * sizeof(char));
+    char* buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "create_spanning_super_reads()\n")
 
-    char* buffer_read_tmp = malloc(size_buffer_read_tmp * sizeof(char));
+    char* buffer_read_tmp = (char*) malloc(size_buffer_read_tmp * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_tmp, "create_spanning_super_reads()\n")
 
-    char* buffer_read_rev = malloc(size_buffer_read_rev * sizeof(char));
+    char* buffer_read_rev = (char*) malloc(size_buffer_read_rev * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
 
-    Pos_length_occ** array_pos_length_occ = malloc(size_array_pos_length_occ * sizeof(Pos_length_occ*));
+    Pos_length_occ** array_pos_length_occ = (Pos_length_occ**) malloc(size_array_pos_length_occ * sizeof(Pos_length_occ*));
     ASSERT_NULL_PTR(array_pos_length_occ, "create_spanning_super_reads()\n")
 
     strcpy(bin_name, prefix_bin_name);
@@ -1132,7 +1132,7 @@ uint64_t create_spanning_super_reads(char* prefix_bin_name, bool pair_ended, int
 
                         size_buffer_read_rev = size_buffer_read;
 
-                        buffer_read_rev = realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
+                        buffer_read_rev = (char*) realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
                         ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
                     }
 
@@ -1276,7 +1276,7 @@ uint64_t create_spanning_super_reads(char* prefix_bin_name, bool pair_ended, int
 
                                                         size_buffer_read = length_read + length_read_tmp - pos_delimiter_read_tmp + 1;
 
-                                                        buffer_read = realloc(buffer_read, size_buffer_read * sizeof(char));
+                                                        buffer_read = (char*) realloc(buffer_read, size_buffer_read * sizeof(char));
                                                         ASSERT_NULL_PTR(buffer_read, "create_spanning_super_reads()\n")
                                                     }
 
@@ -1315,7 +1315,7 @@ uint64_t create_spanning_super_reads(char* prefix_bin_name, bool pair_ended, int
 
                                                     size_buffer_read_rev = size_buffer_read;
 
-                                                    buffer_read_rev = realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
+                                                    buffer_read_rev = (char*) realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
                                                     ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
                                                 }
 
@@ -1408,7 +1408,7 @@ uint64_t create_spanning_super_reads(char* prefix_bin_name, bool pair_ended, int
 
                                 size_array_pos_length_occ = list_count;
 
-                                array_pos_length_occ = realloc(array_pos_length_occ, size_array_pos_length_occ * sizeof(Pos_length_occ*));
+                                array_pos_length_occ = (Pos_length_occ**) realloc(array_pos_length_occ, size_array_pos_length_occ * sizeof(Pos_length_occ*));
                                 ASSERT_NULL_PTR(array_pos_length_occ, "binning_reads()\n")
                             }
 
@@ -1806,25 +1806,25 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
     char* curr_minimizer;
 
-    uint8_t* id_minimizer = malloc(size_minimizer_bytes * sizeof(uint8_t));
+    uint8_t* id_minimizer = (uint8_t*) malloc(size_minimizer_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(id_minimizer, "create_spanning_super_reads()\n")
 
-    char* bin_name = malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
+    char* bin_name = (char*) malloc((length_prefix_bin_name + size_minimizer + 100) * sizeof(char));
     ASSERT_NULL_PTR(bin_name, "create_spanning_super_reads()\n")
 
-    char* buffer_read = malloc(size_buffer_read * sizeof(char));
+    char* buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "create_spanning_super_reads()\n")
 
-    char* buffer_read_tmp = malloc(size_buffer_read_tmp * sizeof(char));
+    char* buffer_read_tmp = (char*) malloc(size_buffer_read_tmp * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_tmp, "create_spanning_super_reads()\n")
 
-    char* buffer_read_rev = malloc(size_buffer_read_rev * sizeof(char));
+    char* buffer_read_rev = (char*) malloc(size_buffer_read_rev * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
 
-    Pos_length_occ** array_pos_length_occ = malloc(size_array_pos_length_occ * sizeof(Pos_length_occ*));
+    Pos_length_occ** array_pos_length_occ = (Pos_length_occ**) malloc(size_array_pos_length_occ * sizeof(Pos_length_occ*));
     ASSERT_NULL_PTR(array_pos_length_occ, "create_spanning_super_reads()\n")
 
-    Mismatch* mis = malloc(nb_mis_max * sizeof(Mismatch));
+    Mismatch* mis = (Mismatch*) malloc(nb_mis_max * sizeof(Mismatch));
     ASSERT_NULL_PTR(mis, "binning_reads()\n")
 
     strcpy(bin_name, prefix_bin_name);
@@ -1953,7 +1953,7 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
                         size_buffer_read_rev = size_buffer_read;
 
-                        buffer_read_rev = realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
+                        buffer_read_rev = (char*) realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
                         ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
                     }
 
@@ -2087,7 +2087,7 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
                                                     if ((mis[it_id_occ].position >= pos_length_occ->position) && (mis[it_id_occ].position < pos_length_occ->position + pos_length_occ->length)){
 
-                                                        pos_length_occ->list_mismatches = realloc(pos_length_occ->list_mismatches, (pos_length_occ->nb_mismatches + 1) * sizeof(Mismatch));
+                                                        pos_length_occ->list_mismatches = (Mismatch*) realloc(pos_length_occ->list_mismatches, (pos_length_occ->nb_mismatches + 1) * sizeof(Mismatch));
                                                         ASSERT_NULL_PTR(pos_length_occ->list_mismatches, "create_spanning_super_reads()\n")
 
                                                         memcpy(&(pos_length_occ->list_mismatches[pos_length_occ->nb_mismatches]), &mis[it_id_occ], sizeof(Mismatch));
@@ -2112,7 +2112,7 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
                                                     size_buffer_read = length_read + length_read_tmp - pos_delimiter_read_tmp + 1;
 
-                                                    buffer_read = realloc(buffer_read, size_buffer_read * sizeof(char));
+                                                    buffer_read = (char*) realloc(buffer_read, size_buffer_read * sizeof(char));
                                                     ASSERT_NULL_PTR(buffer_read, "create_spanning_super_reads()\n")
                                                 }
 
@@ -2151,7 +2151,7 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
                                                 size_buffer_read_rev = size_buffer_read;
 
-                                                buffer_read_rev = realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
+                                                buffer_read_rev = (char*) realloc(buffer_read_rev, size_buffer_read_rev * sizeof(char));
                                                 ASSERT_NULL_PTR(buffer_read_rev, "create_spanning_super_reads()\n")
                                             }
 
@@ -2243,7 +2243,7 @@ uint64_t create_spanning_super_reads2(char* prefix_bin_name, bool pair_ended, in
 
                                 size_array_pos_length_occ = list_count;
 
-                                array_pos_length_occ = realloc(array_pos_length_occ, size_array_pos_length_occ * sizeof(Pos_length_occ*));
+                                array_pos_length_occ = (Pos_length_occ**) realloc(array_pos_length_occ, size_array_pos_length_occ * sizeof(Pos_length_occ*));
                                 ASSERT_NULL_PTR(array_pos_length_occ, "binning_reads()\n")
                             }
 
@@ -2567,7 +2567,7 @@ Pos_length_occ* parse_pos_length_occ(char** meta_to_parse, bool pair_ended){
 
     if (pair_ended){
 
-        pos_length_occ->id_occ = malloc(pos_length_occ->occ_count * sizeof(int64_t));
+        pos_length_occ->id_occ = (int64_t*) malloc(pos_length_occ->occ_count * sizeof(int64_t));
         ASSERT_NULL_PTR(pos_length_occ->id_occ, "parse_pos_length_occ()\n")
 
         for (int i = 0; i < pos_length_occ->occ_count; i++){
@@ -2578,7 +2578,7 @@ Pos_length_occ* parse_pos_length_occ(char** meta_to_parse, bool pair_ended){
 
     if (pos_length_occ->nb_mismatches){
 
-        pos_length_occ->list_mismatches = malloc(pos_length_occ->nb_mismatches * sizeof(Mismatch));
+        pos_length_occ->list_mismatches = (Mismatch*) malloc(pos_length_occ->nb_mismatches * sizeof(Mismatch));
         ASSERT_NULL_PTR(pos_length_occ->list_mismatches, "parse_pos_length_occ()\n")
 
         for (int i = 0; i < pos_length_occ->nb_mismatches; i++){
@@ -2692,18 +2692,18 @@ void reorder_reads(char* filename_src, char* filename_dest, int size_minimizer, 
 
     double first_reading = 0;
 
-    uint8_t* processed_reads = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    uint8_t* processed_reads = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(processed_reads, "reorder_reads()\n")
 
-    uint8_t* minimizers = calloc(SIZE_BUFFER, sizeof(char));
+    uint8_t* minimizers = (char*) calloc(SIZE_BUFFER, sizeof(char));
     ASSERT_NULL_PTR(minimizers, "reorder_reads()\n")
 
     char* curr_minimizer;
 
-    char* buffer_read = malloc(SIZE_BUFFER * sizeof(char));
+    char* buffer_read = (char*) malloc(SIZE_BUFFER * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "reorder_reads()\n")
 
-    char* buffer_read_rev = malloc(SIZE_BUFFER * sizeof(char));
+    char* buffer_read_rev = (char*) malloc(SIZE_BUFFER * sizeof(char));
     ASSERT_NULL_PTR(buffer_read_rev, "reorder_reads()\n")
 
     List* list_minimizers = List_create();
@@ -2732,7 +2732,7 @@ void reorder_reads(char* filename_src, char* filename_dest, int size_minimizer, 
             while (fgets(buffer_read, SIZE_BUFFER, file_reads_src) != NULL){
 
                 if (nb_read+1 > size_processed_reads){
-                    processed_reads = realloc(processed_reads, (size_processed_reads/SIZE_BITS_UINT_8T + SIZE_BUFFER) * sizeof(uint8_t));
+                    processed_reads = (uint8_t*) realloc(processed_reads, (size_processed_reads/SIZE_BITS_UINT_8T + SIZE_BUFFER) * sizeof(uint8_t));
                     ASSERT_NULL_PTR(processed_reads, "reorder_reads()\n")
 
                     memset(&processed_reads[size_processed_reads/SIZE_BITS_UINT_8T], 0 , SIZE_BUFFER * sizeof(uint8_t));
@@ -2742,7 +2742,7 @@ void reorder_reads(char* filename_src, char* filename_dest, int size_minimizer, 
 
                 if ((nb_read+1) * nb_bytes_minimizer > size_array_minimizers){
 
-                    minimizers = realloc(minimizers, (size_array_minimizers + SIZE_BUFFER) * sizeof(uint8_t));
+                    minimizers = (uint8_t*) realloc(minimizers, (size_array_minimizers + SIZE_BUFFER) * sizeof(uint8_t));
                     ASSERT_NULL_PTR(minimizers, "reorder_reads()\n")
 
                     memset(&minimizers[size_array_minimizers], 0, SIZE_BUFFER * sizeof(uint8_t));
@@ -2944,33 +2944,33 @@ void min_simReads_max_simkmers2(char* filename_read_1, char* filename_read_2, bo
         iterate_over_kmers(graph_no_iupac, insert_kmer_into_bf_from_graph, false, inserted_kmers);
     }
 
-    output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers() 2\n")
 
     strcpy(output_prefix_buffer, output_prefix);
 
-    buffer_read = malloc(size_buffer_read * sizeof(char));
+    buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "min_simReads_max_simkmers() 7\n")
 
-    buffer_rev_comp = calloc(size_buffer_rev_comp, sizeof(char));
+    buffer_rev_comp = (char*) calloc(size_buffer_rev_comp, sizeof(char));
     ASSERT_NULL_PTR(buffer_rev_comp, "min_simReads_max_simkmers() 1\n")
 
-    buffer_kmer = malloc(SIZE_BUFFER * sizeof(char));
+    buffer_kmer = (char*) malloc(SIZE_BUFFER * sizeof(char));
     ASSERT_NULL_PTR(buffer_kmer, "min_simReads_max_simkmers() 12\n")
 
-    buffer_shift = malloc(SIZE_BUFFER * sizeof(char));
+    buffer_shift = (char*) malloc(SIZE_BUFFER * sizeof(char));
     ASSERT_NULL_PTR(buffer_shift, "min_simReads_max_simkmers() 13\n")
 
-    buffer_info_read = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    buffer_info_read = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(buffer_info_read, "min_simReads_max_simkmers() 16\n")
 
-    kmer = calloc(nb_bytes_iupac, sizeof(uint8_t));
+    kmer = (uint8_t*) calloc(nb_bytes_iupac, sizeof(uint8_t));
     ASSERT_NULL_PTR(kmer, "min_simReads_max_simkmers() 16\n")
 
-    hash_val = malloc(size_all_hash_val * sizeof(uint64_t));
+    hash_val = (uint64_t*) malloc(size_all_hash_val * sizeof(uint64_t));
     ASSERT_NULL_PTR(hash_val,"min_simReads_max_simkmers() 17\n")
 
-    hash_val_rev = malloc(size_all_hash_val * sizeof(uint64_t));
+    hash_val_rev = (uint64_t*) malloc(size_all_hash_val * sizeof(uint64_t));
     ASSERT_NULL_PTR(hash_val_rev,"min_simReads_max_simkmers() 18\n")
 
     strcpy(&(output_prefix_buffer[len_output_prefix]), "_span_sup_reads");
@@ -3010,10 +3010,10 @@ void min_simReads_max_simkmers2(char* filename_read_1, char* filename_read_2, bo
 
             size_all_hash_val = length_seq * 2;
 
-            hash_val = realloc(hash_val, size_all_hash_val * sizeof(uint64_t));
+            hash_val = (uint64_t*) realloc(hash_val, size_all_hash_val * sizeof(uint64_t));
             ASSERT_NULL_PTR(hash_val,"min_simReads_max_simkmers() 17\n")
 
-            hash_val_rev = realloc(hash_val_rev, size_all_hash_val * sizeof(uint64_t));
+            hash_val_rev = (uint64_t*) realloc(hash_val_rev, size_all_hash_val * sizeof(uint64_t));
             ASSERT_NULL_PTR(hash_val_rev,"min_simReads_max_simkmers() 18\n")
         }
 
@@ -3060,7 +3060,7 @@ void min_simReads_max_simkmers2(char* filename_read_1, char* filename_read_2, bo
 
                 size_buffer_rev_comp = size_buffer_read;
 
-                buffer_rev_comp = realloc(buffer_rev_comp, size_buffer_rev_comp * sizeof(char));
+                buffer_rev_comp = (char*) realloc(buffer_rev_comp, size_buffer_rev_comp * sizeof(char));
                 ASSERT_NULL_PTR(buffer_rev_comp, "min_simReads_max_simkmers() 20\n")
             }
 
@@ -3350,44 +3350,44 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
     bool first_kmers_part = true;
     bool last_kmers_part = true;
 
-    uint64_t* pref_part = calloc(1, sizeof(uint64_t));
-    uint64_t* suf_part = calloc(1, sizeof(uint64_t));
+    uint64_t* pref_part = (uint64_t*) calloc(1, sizeof(uint64_t));
+    uint64_t* suf_part = (uint64_t*) calloc(1, sizeof(uint64_t));
 
     uint64_t* union_pref_part = NULL;
 
     uint64_t** pref_suf;
 
-    uint8_t* kmers_iupac = malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
+    uint8_t* kmers_iupac = (uint8_t*) malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(kmers_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* prefixes_iupac = calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
+    uint8_t* prefixes_iupac = (uint8_t*) calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefixes_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* suffixes_iupac = calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
+    uint8_t* suffixes_iupac = (uint8_t*) calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
     ASSERT_NULL_PTR(suffixes_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* prev_suffix_iupac = calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
+    uint8_t* prev_suffix_iupac = (uint8_t*) calloc(nb_bytes_seed_iupac, sizeof(uint8_t));
     ASSERT_NULL_PTR(prev_suffix_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* prefixes = calloc(nb_bytes_seed, sizeof(uint8_t));
+    uint8_t* prefixes = (uint8_t*) calloc(nb_bytes_seed, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefixes, "compressKmers_from_KmerFiles()")
 
-    uint8_t* suffixes = calloc(nb_bytes_seed, sizeof(uint8_t));
+    uint8_t* suffixes = (uint8_t*) calloc(nb_bytes_seed, sizeof(uint8_t));
     ASSERT_NULL_PTR(suffixes, "compressKmers_from_KmerFiles()")
 
-    uint8_t* prefixes_in_partition = calloc(size_annot_seeds, sizeof(uint8_t));
+    uint8_t* prefixes_in_partition = (uint8_t*) calloc(size_annot_seeds, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefixes_in_partition, "compressKmers_from_KmerFiles()")
 
-    uint8_t* suffixes_in_partition = calloc(size_annot_seeds, sizeof(uint8_t));
+    uint8_t* suffixes_in_partition = (uint8_t*) calloc(size_annot_seeds, sizeof(uint8_t));
     ASSERT_NULL_PTR(suffixes_in_partition, "compressKmers_from_KmerFiles()")
 
-    char* line = calloc(size_kmer + 1, sizeof(char));
+    char* line = (char*) calloc(size_kmer + 1, sizeof(char));
     ASSERT_NULL_PTR(line,"compressKmers_from_KmerFiles()")
 
-    char* seed_ASCII = calloc(size_seed + 1, sizeof(char));
+    char* seed_ASCII = (char*) calloc(size_seed + 1, sizeof(char));
     ASSERT_NULL_PTR(seed_ASCII, "compressKmers_from_KmerFiles()")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers()")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -3537,7 +3537,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
 
                     pref_part[0]++;
 
-                    pref_part = realloc(pref_part, (pref_part[0]+1) * sizeof(uint64_t));
+                    pref_part = (uint64_t*) realloc(pref_part, (pref_part[0]+1) * sizeof(uint64_t));
                     ASSERT_NULL_PTR(pref_part, "compressKmers_from_KmerFiles_bis2()\n")
 
                     pref_part[pref_part[0]] = pref_iupac_tmp;
@@ -3574,7 +3574,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
                         fwrite(&recycled_partition, sizeof(uint32_t), 1, file_parts);
                         fwrite(suf_part, sizeof(uint32_t), 1, file_parts_count);
 
-                        pref_suf[0] = realloc(pref_suf[0], (pref_part[0] + pref_suf[0][0] + 1) * sizeof(uint64_t));
+                        pref_suf[0] = (uint64_t*) realloc(pref_suf[0], (pref_part[0] + pref_suf[0][0] + 1) * sizeof(uint64_t));
                         ASSERT_NULL_PTR(pref_suf[0], "compressKmers_from_KmerFiles_bis2()\n")
 
                         memcpy(&(pref_suf[0][pref_suf[0][0]+1]), &pref_part[1], pref_part[0] * sizeof(uint64_t));
@@ -3583,7 +3583,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
 
                         free(pref_part);
 
-                        pref_suf[1] = realloc(pref_suf[1], (suf_part[0] + pref_suf[1][0] + 1) * sizeof(uint64_t));
+                        pref_suf[1] = (uint64_t*) realloc(pref_suf[1], (suf_part[0] + pref_suf[1][0] + 1) * sizeof(uint64_t));
                         ASSERT_NULL_PTR(pref_suf[1], "compressKmers_from_KmerFiles_bis2()\n")
 
                         memcpy(&(pref_suf[1][pref_suf[1][0]+1]), &suf_part[1], suf_part[0] * sizeof(uint64_t));
@@ -3598,7 +3598,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
                         nb_recycled_part++;
                     }
                     else{
-                        pref_suf = malloc(2 * sizeof(uint64_t*));
+                        pref_suf = (uint64_t**) malloc(2 * sizeof(uint64_t*));
                         ASSERT_NULL_PTR(pref_suf, "compressKmers_from_KmerFiles_bis2()\n")
 
                         pref_suf[0] = pref_part;
@@ -3620,7 +3620,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
                     }
                 }
                 else{
-                    pref_suf = malloc(2 * sizeof(uint64_t*));
+                    pref_suf = (uint64_t**) malloc(2 * sizeof(uint64_t*));
                     ASSERT_NULL_PTR(pref_suf, "compressKmers_from_KmerFiles_bis2()\n")
 
                     pref_suf[0] = pref_part;
@@ -3642,8 +3642,8 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
                 }
 
                 first_kmers_part = true;
-                pref_part = calloc(1, sizeof(uint64_t));
-                suf_part = calloc(1, sizeof(uint64_t));
+                pref_part = (uint64_t*) calloc(1, sizeof(uint64_t));
+                suf_part = (uint64_t*) calloc(1, sizeof(uint64_t));
             }
 
             if (pref_iupac) JHSI(PValue, prefix_judy, prefixes_iupac, nb_bytes_seed_iupac)
@@ -3667,7 +3667,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
 
             pref_part[0]++;
 
-            pref_part = realloc(pref_part, (pref_part[0]+1) * sizeof(uint64_t));
+            pref_part = (uint64_t*) realloc(pref_part, (pref_part[0]+1) * sizeof(uint64_t));
             ASSERT_NULL_PTR(pref_part, "compressKmers_from_KmerFiles_bis2()\n")
 
             for (z = 0, pref_iupac_tmp = 0; z < nb_bytes_seed_iupac; z++)
@@ -3677,7 +3677,7 @@ uint32_t compressKmers_from_KmerFiles_bis2(char* output_prefix, int size_seed, i
 
             suf_part[0]++;
 
-            suf_part = realloc(suf_part, (suf_part[0]+1) * sizeof(uint64_t));
+            suf_part = (uint64_t*) realloc(suf_part, (suf_part[0]+1) * sizeof(uint64_t));
             ASSERT_NULL_PTR(suf_part, "compressKmers_from_KmerFiles_bis2()\n")
 
             for (z = 0, suf_iupac_tmp = 0; z < nb_bytes_seed_iupac; z++)
@@ -3819,34 +3819,34 @@ uint32_t compressKmers_from_KmerFiles_bis3(char* output_prefix, int size_seed, i
 
     uint8_t* partition_tmp;
 
-    uint8_t* kmers_iupac = malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
+    uint8_t* kmers_iupac = (uint8_t*) malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(kmers_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* prefixes = calloc(nb_bytes_seed, sizeof(uint8_t));
+    uint8_t* prefixes = (uint8_t*) calloc(nb_bytes_seed, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefixes, "compressKmers_from_KmerFiles()")
 
-    uint8_t* suffixes = calloc(nb_bytes_seed, sizeof(uint8_t));
+    uint8_t* suffixes = (uint8_t*) calloc(nb_bytes_seed, sizeof(uint8_t));
     ASSERT_NULL_PTR(suffixes, "compressKmers_from_KmerFiles()")
 
-    uint8_t* partition = calloc(size_annot_seeds, sizeof(uint8_t));
+    uint8_t* partition = (uint8_t*) calloc(size_annot_seeds, sizeof(uint8_t));
     ASSERT_NULL_PTR(partition, "compressKmers_from_KmerFiles()")
 
-    char* prefixes_iupac = calloc(size_seed + 1, sizeof(char));
+    char* prefixes_iupac = (char*) calloc(size_seed + 1, sizeof(char));
     ASSERT_NULL_PTR(prefixes_iupac, "compressKmers_from_KmerFiles()")
 
-    char* suffixes_iupac = calloc(size_seed + 1, sizeof(char));
+    char* suffixes_iupac = (char*) calloc(size_seed + 1, sizeof(char));
     ASSERT_NULL_PTR(suffixes_iupac, "compressKmers_from_KmerFiles()")
 
-    char* prev_suffix_iupac = calloc(size_seed + 1, sizeof(char));
+    char* prev_suffix_iupac = (char*) calloc(size_seed + 1, sizeof(char));
     ASSERT_NULL_PTR(prev_suffix_iupac, "compressKmers_from_KmerFiles()")
 
-    char* it_iupac = calloc(size_seed + 1, sizeof(char));
+    char* it_iupac = (char*) calloc(size_seed + 1, sizeof(char));
     ASSERT_NULL_PTR(it_iupac, "compressKmers_from_KmerFiles()")
 
-    char* line = calloc(size_kmer + 1, sizeof(char));
+    char* line = (char*) calloc(size_kmer + 1, sizeof(char));
     ASSERT_NULL_PTR(line,"compressKmers_from_KmerFiles()")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers()")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -4040,7 +4040,7 @@ uint32_t compressKmers_from_KmerFiles_bis3(char* output_prefix, int size_seed, i
                     }
                     else{
 
-                        partition_all = malloc(2 * sizeof(void*));
+                        partition_all = (void**) malloc(2 * sizeof(void*));
                         ASSERT_NULL_PTR(partition_all, "compressKmers_from_KmerFiles()")
 
                         partition_all[0] = (void*) partition;
@@ -4068,7 +4068,7 @@ uint32_t compressKmers_from_KmerFiles_bis3(char* output_prefix, int size_seed, i
                 }
                 else{
 
-                    partition_all = malloc(2 * sizeof(void*));
+                    partition_all = (void**) malloc(2 * sizeof(void*));
                     ASSERT_NULL_PTR(partition_all, "compressKmers_from_KmerFiles()")
 
                     partition_all[0] = (void*) partition;
@@ -4096,7 +4096,7 @@ uint32_t compressKmers_from_KmerFiles_bis3(char* output_prefix, int size_seed, i
 
                 J1FA(Rc_word, pref_suf_pos);
 
-                partition = calloc(size_annot_seeds, sizeof(uint8_t));
+                partition = (uint8_t*) calloc(size_annot_seeds, sizeof(uint8_t));
                 ASSERT_NULL_PTR(partition, "compressKmers_from_KmerFiles()")
 
                 partition_iupac = NULL;
@@ -4355,7 +4355,7 @@ uint32_t* recycle_sub_paths(char* seed, uint32_t recycled_part, Pvoid_t* recycl_
 
     if (PValue == NULL){
 
-        array_pref_part_recycl = malloc(2 * sizeof(uint32_t));
+        array_pref_part_recycl = (uint32_t*) malloc(2 * sizeof(uint32_t));
         ASSERT_NULL_PTR(array_pref_part_recycl, "load_part_recycl()\n")
 
         array_pref_part_recycl[0] = 1;
@@ -4369,7 +4369,7 @@ uint32_t* recycle_sub_paths(char* seed, uint32_t recycled_part, Pvoid_t* recycl_
 
         array_pref_part_recycl[0]++;
 
-        array_pref_part_recycl = realloc(array_pref_part_recycl, (array_pref_part_recycl[0] + 1) * sizeof(uint32_t));
+        array_pref_part_recycl = (uint32_t*) realloc(array_pref_part_recycl, (array_pref_part_recycl[0] + 1) * sizeof(uint32_t));
         ASSERT_NULL_PTR(array_pref_part_recycl, "load_part_recycl()\n")
 
         array_pref_part_recycl[array_pref_part_recycl[0]] = recycled_part;
@@ -4407,13 +4407,13 @@ void serialize_subpaths_recycling(char* filename_subpaths_recycling, Pvoid_t* re
     uint64_t seed_iupac_tmp;
     uint64_t prev_seed_iupac = 0;
 
-    uint8_t* seed_comp = malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
+    uint8_t* seed_comp = (uint8_t*) malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_comp, "serialize_subpaths_recycling()\n")
 
-    uint8_t* seed_ascii = malloc((size_seed + 1) * sizeof(uint8_t));
+    uint8_t* seed_ascii = (uint8_t*) malloc((size_seed + 1) * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_ascii, "serialize_subpaths_recycling()\n")
 
-    uint8_t* seed_present = calloc(size_seed_present, sizeof(uint8_t));
+    uint8_t* seed_present = (uint8_t*) calloc(size_seed_present, sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_present, "serialize_subpaths_recycling()\n")
 
     FILE* file_subpaths_recycling = fopen(filename_subpaths_recycling, "wb");
@@ -4545,28 +4545,28 @@ void insert_kmers_partitions2(char* output_prefix, int size_seed, int size_kmer,
 
     bool kmer_is_iupac;
 
-    char* seed = malloc((size_seed + 1) * sizeof(char));
+    char* seed = (char*) malloc((size_seed + 1) * sizeof(char));
     ASSERT_NULL_PTR(seed, "compressKmers_from_KmerFiles()")
 
-    char* seed_tmp = malloc((size_seed + 1) * sizeof(char));
+    char* seed_tmp = (char*) malloc((size_seed + 1) * sizeof(char));
     ASSERT_NULL_PTR(seed_tmp, "compressKmers_from_KmerFiles()")
 
-    char* ascii_kmer = malloc((size_kmer + 1) * sizeof(char));
+    char* ascii_kmer = (char*) malloc((size_kmer + 1) * sizeof(char));
     ASSERT_NULL_PTR(ascii_kmer, "compressKmers_from_KmerFiles()")
 
-    char* line = calloc(size_kmer + 1, sizeof(char));
+    char* line = (char*) calloc(size_kmer + 1, sizeof(char));
     ASSERT_NULL_PTR(line, "compressKmers_from_KmerFiles()")
 
-    uint8_t* kmers_iupac = malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
+    uint8_t* kmers_iupac = (uint8_t*) malloc(nb_kmer_in_buf * nb_bytes_kmer_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(kmers_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* kmer_no_iupac = calloc(nb_bytes_kmer, sizeof(uint8_t));
+    uint8_t* kmer_no_iupac = (uint8_t*) calloc(nb_bytes_kmer, sizeof(uint8_t));
     ASSERT_NULL_PTR(kmer_no_iupac, "compressKmers_from_KmerFiles()")
 
-    uint8_t* substring = calloc(nb_bytes_kmer_iupac, sizeof(uint8_t));
+    uint8_t* substring = (uint8_t*) calloc(nb_bytes_kmer_iupac, sizeof(uint8_t));
     ASSERT_NULL_PTR(substring, "compressKmers_from_KmerFiles()")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "min_simReads_max_simkmers()")
 
     //uint8_t mask_seed_iupac = SIZE_BITS_UINT_8T - ((size_seed % 2) * 4);
@@ -4836,12 +4836,12 @@ void insert_kmers_partitions2(char* output_prefix, int size_seed, int size_kmer,
                     if (inter_part != NULL){
 
                         if (kmer_is_iupac){
-                            kmer_tmp = malloc((nb_bytes_kmer_iupac + 1) * sizeof(uint8_t));
+                            kmer_tmp = (uint8_t*) malloc((nb_bytes_kmer_iupac + 1) * sizeof(uint8_t));
                             memcpy(&kmer_tmp[1], kmer, nb_bytes_kmer_iupac * sizeof(uint8_t));
                             kmer_tmp[0] = 0xff;
                         }
                         else{
-                            kmer_tmp = malloc((nb_bytes_kmer + 1) * sizeof(uint8_t));
+                            kmer_tmp = (uint8_t*) malloc((nb_bytes_kmer + 1) * sizeof(uint8_t));
                             memcpy(&kmer_tmp[1], kmer, nb_bytes_kmer * sizeof(uint8_t));
                             kmer_tmp[0] = 0x0;
                         }
@@ -5082,7 +5082,7 @@ void compress_annotations_BFT_disk(BFT_Root* bft, char* filename_bft){
     int len_longest_annot;
     int lvl_bft = (bft->k / NB_CHAR_SUF_PREF) - 1;
 
-    char* filename_bft_tmp = malloc((strlen(filename_bft) + 50) * sizeof(char));
+    char* filename_bft_tmp = (char*) malloc((strlen(filename_bft) + 50) * sizeof(char));
     ASSERT_NULL_PTR(filename_bft_tmp, "compress_annotations_BFT_disk()\n")
 
     strcpy(filename_bft_tmp, filename_bft);
@@ -5114,7 +5114,7 @@ void compress_annotations_BFT_disk(BFT_Root* bft, char* filename_bft){
     #if defined (_WORDx86)
         Word_t * PValue;
 
-        uint8_t* it_index = calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T - 1) + 4), sizeof(uint8_t));
+        uint8_t* it_index = (uint8_t*) calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T - 1) + 4), sizeof(uint8_t));
         ASSERT_NULL_PTR(it_index, "compressKmers_from_KmerFiles()\n");
 
         JSLF(PValue, comp_annots, it_index);
@@ -5177,10 +5177,10 @@ void create_subgraph_decomp(char* output_prefix, FILE* file_partitions, Pvoid_t*
 
     uint32_t nb_kmers = 0;
 
-    char* seed = calloc(size_seed * 2 + 1, sizeof(char));
+    char* seed = (char*) calloc(size_seed * 2 + 1, sizeof(char));
     ASSERT_NULL_PTR(seed, "create_subgraph_decomp()\n")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "create_subgraph_decomp()\n")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -5317,7 +5317,7 @@ size_t load_subgraph(BFT_kmer* kmer, BFT* graph, va_list args){
 
     JSLG(PValue, *prefix_part_recycl, (uint8_t*)seed);
 
-    list_part_recycl = malloc((list_kmer_partitions[0] + 1) * sizeof(uint32_t));
+    list_part_recycl = (uint32_t*) malloc((list_kmer_partitions[0] + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_part_recycl, "load_subgraph()\n")
 
     list_part_recycl[0] = 0;
@@ -5384,7 +5384,7 @@ size_t load_subgraph(BFT_kmer* kmer, BFT* graph, va_list args){
             nb_cell = new_graph->info_per_lvl[lvl_suffix].size_kmer_in_bytes;
             nb_bytes_kmer = CEIL(new_graph->k * 2, SIZE_BITS_UINT_8T);
 
-            substring = malloc(nb_bytes_kmer * sizeof(uint8_t));
+            substring = (uint8_t*) malloc(nb_bytes_kmer * sizeof(uint8_t));
             ASSERT_NULL_PTR(substring, "kmer_has_partition()\n")
 
             memcpy(substring, kmer->kmer_comp, nb_bytes_kmer * sizeof(uint8_t));
@@ -5553,7 +5553,7 @@ void cdbg_traverse_overlap_insert(BFT* bft_no_iupac, BFT* bft_iupac, BFT* insert
 
         if (is_substring_IUPAC(overlap)){
 
-            overlap_comp = calloc(size_overlap_comp, sizeof(uint8_t));
+            overlap_comp = (uint8_t*) calloc(size_overlap_comp, sizeof(uint8_t));
             ASSERT_NULL_PTR(overlap_comp, "cdbg_traverse_overlap_insert()\n")
 
             parseKmerCount_IUPAC(overlap, length_overlap, overlap_comp, 0);
@@ -5578,7 +5578,7 @@ void cdbg_traverse_overlap_insert(BFT* bft_no_iupac, BFT* bft_iupac, BFT* insert
 
             if (!kmer_has_partition){
 
-                overlap_comp = calloc(size_overlap_comp, sizeof(uint8_t));
+                overlap_comp = (uint8_t*) calloc(size_overlap_comp, sizeof(uint8_t));
                 ASSERT_NULL_PTR(overlap_comp, "cdbg_traverse_overlap_insert()\n")
 
                 parseKmerCount_IUPAC(overlap, length_overlap, overlap_comp, 0);
@@ -5614,10 +5614,10 @@ bool cdbg_get_successor_overlap(BFT* bft, bool graph_is_iupac, char** overlap, u
 
         int length_overlap = strlen(*overlap);
 
-        char* overlap_no_iupac = malloc((bft->k + 1) * sizeof(char));
+        char* overlap_no_iupac = (char*) malloc((bft->k + 1) * sizeof(char));
         ASSERT_NULL_PTR(overlap_no_iupac, "cdbg_get_successor_overlap()\n")
 
-        uint8_t* overlap_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+        uint8_t* overlap_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
         ASSERT_NULL_PTR(overlap_comp, "cdbg_get_successor_overlap()\n")
 
         parseKmerCount_IUPAC(*overlap, length_overlap, overlap_comp, 0);
@@ -5628,7 +5628,7 @@ bool cdbg_get_successor_overlap(BFT* bft, bool graph_is_iupac, char** overlap, u
 
         if (kmer_has_partition_bool){
 
-            *overlap = realloc(*overlap, (bft->k / 2 + 1) * sizeof(char));
+            *overlap = (char*) realloc(*overlap, (bft->k / 2 + 1) * sizeof(char));
             ASSERT_NULL_PTR(*overlap, "cdbg_get_successor_overlap()\n")
 
             parseKmerCount(overlap_no_iupac, bft->k, overlap_comp, 0);
@@ -5641,7 +5641,7 @@ bool cdbg_get_successor_overlap(BFT* bft, bool graph_is_iupac, char** overlap, u
     }
     else{
 
-        *overlap = realloc(*overlap, (bft->k + 1) * sizeof(char));
+        *overlap = (char*) realloc(*overlap, (bft->k + 1) * sizeof(char));
         ASSERT_NULL_PTR(*overlap, "cdbg_get_successor_overlap()\n")
 
         prefix_matching(bft, *overlap, kmer_has_partition, *overlap, partition, &kmer_has_partition_bool);
@@ -5662,10 +5662,10 @@ bool cdbg_get_successor_overlap_custom(BFT* bft, bool graph_is_iupac, char** ove
 
         int length_overlap = strlen(*overlap);
 
-        char* overlap_no_iupac = malloc((bft->k + 1) * sizeof(char));
+        char* overlap_no_iupac = (char*) malloc((bft->k + 1) * sizeof(char));
         ASSERT_NULL_PTR(overlap_no_iupac, "cdbg_get_successor_overlap()\n")
 
-        uint8_t* overlap_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+        uint8_t* overlap_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
         ASSERT_NULL_PTR(overlap_comp, "cdbg_get_successor_overlap()\n")
 
         parseKmerCount_IUPAC(*overlap, length_overlap, overlap_comp, 0);
@@ -5676,7 +5676,7 @@ bool cdbg_get_successor_overlap_custom(BFT* bft, bool graph_is_iupac, char** ove
 
         if (kmer_has_partition_bool){
 
-            *overlap = realloc(*overlap, (bft->k / 2 + 1) * sizeof(char));
+            *overlap = (char*) realloc(*overlap, (bft->k / 2 + 1) * sizeof(char));
             ASSERT_NULL_PTR(*overlap, "cdbg_get_successor_overlap()\n")
 
             parseKmerCount(overlap_no_iupac, bft->k, overlap_comp, 0);
@@ -5689,7 +5689,7 @@ bool cdbg_get_successor_overlap_custom(BFT* bft, bool graph_is_iupac, char** ove
     }
     else{
 
-        *overlap = realloc(*overlap, (bft->k + 1) * sizeof(char));
+        *overlap = (char*) realloc(*overlap, (bft->k + 1) * sizeof(char));
         ASSERT_NULL_PTR(*overlap, "cdbg_get_successor_overlap()\n")
 
         prefix_matching_custom(bft, *overlap, junction_overlap, kmer_has_partition, *overlap, partition, &kmer_has_partition_bool);
@@ -5744,7 +5744,7 @@ size_t insert_kmer_with_partition(BFT_kmer* kmer, BFT* graph, va_list args){
             int nb_cell = bft_to_insert->info_per_lvl[lvl_bft_to_insert].size_kmer_in_bytes;
             int nb_bytes_kmer = CEIL(bft_to_insert->k * 2, SIZE_BITS_UINT_8T);
 
-            uint8_t* substring = malloc(nb_bytes_kmer * sizeof(uint8_t));
+            uint8_t* substring = (uint8_t*) malloc(nb_bytes_kmer * sizeof(uint8_t));
             ASSERT_NULL_PTR(substring, "insert_kmer_with_partition()\n")
 
             memcpy(substring, kmer->kmer_comp, nb_bytes_kmer * sizeof(uint8_t));
@@ -5834,10 +5834,10 @@ void write_partition(char* filename, uint8_t* partition_no_iupac, Pvoid_t* parti
 
     uint32_t size_seed_present = CEIL((uint32_t) pow(4, size_seed), SIZE_BITS_UINT_8T);
 
-    uint8_t* seed_comp = malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
+    uint8_t* seed_comp = (uint8_t*) malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_comp, "write_partition()\n")
 
-    uint8_t* seed_ascii = malloc((size_seed + 1) * sizeof(uint8_t));
+    uint8_t* seed_ascii = (uint8_t*) malloc((size_seed + 1) * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_ascii, "write_partition()\n")
 
     FILE* file_part = fopen(filename, "wb");
@@ -5881,10 +5881,10 @@ void read_partition(char* filename, uint8_t* partition_no_iupac, Pvoid_t* partit
 
     uint32_t size_seed_present = CEIL((uint32_t) pow(4, size_seed), SIZE_BITS_UINT_8T);
 
-    uint8_t* seed_comp = malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
+    uint8_t* seed_comp = (uint8_t*) malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_comp, "write_partition()\n")
 
-    uint8_t* seed_ascii = malloc((size_seed + 1) * sizeof(uint8_t));
+    uint8_t* seed_ascii = (uint8_t*) malloc((size_seed + 1) * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_ascii, "write_partition()\n")
 
     FILE* file_part = fopen(filename, "rb");
@@ -5955,7 +5955,7 @@ uint8_t find_kmer(BFT* graph_iupac, BFT* graph_no_iupac,
         }
         else{
 
-            seed_comp = calloc(nb_bytes_seed,sizeof(char));
+            seed_comp = (char*) calloc(nb_bytes_seed,sizeof(char));
             ASSERT_NULL_PTR(seed_comp, "decompress() 1")
 
             parseKmerCount(*seed, length_seed, seed_comp, 0);
@@ -5993,7 +5993,7 @@ uint8_t find_kmer(BFT* graph_iupac, BFT* graph_no_iupac,
             }
             else{
 
-                seed_comp = calloc(nb_bytes_seed,sizeof(char));
+                seed_comp = (char*) calloc(nb_bytes_seed,sizeof(char));
                 ASSERT_NULL_PTR(seed_comp, "decompress() 1")
 
                 parseKmerCount(&((*seed)[graph_no_iupac->k - length_seed]), length_seed, seed_comp, 0);
@@ -6059,7 +6059,7 @@ uint8_t find_kmer_custom(BFT* graph_iupac, BFT* graph_no_iupac,
         }
         else{
 
-            seed_comp = calloc(nb_bytes_seed,sizeof(char));
+            seed_comp = (char*) calloc(nb_bytes_seed,sizeof(char));
             ASSERT_NULL_PTR(seed_comp, "decompress() 1")
 
             parseKmerCount(*seed, length_seed, seed_comp, 0);
@@ -6096,7 +6096,7 @@ uint8_t find_kmer_custom(BFT* graph_iupac, BFT* graph_no_iupac,
             }
             else{
 
-                seed_comp = calloc(nb_bytes_seed,sizeof(char));
+                seed_comp = (char*) calloc(nb_bytes_seed,sizeof(char));
                 ASSERT_NULL_PTR(seed_comp, "decompress() 1")
 
                 parseKmerCount(&((*seed)[graph_no_iupac->k - length_seed]), length_seed, seed_comp, 0);
@@ -6145,7 +6145,7 @@ void insert_overlap(char* overlap, int length_overlap, uint8_t* partition_no_iup
     if (is_substring_IUPAC(overlap)) JSLI(PValue_partition_iupac, *partition_iupac, (uint8_t*) overlap)
     else{
 
-        overlap_comp = calloc(nb_bytes_overlap, sizeof(uint8_t));
+        overlap_comp = (uint8_t*) calloc(nb_bytes_overlap, sizeof(uint8_t));
         ASSERT_NULL_PTR(overlap_comp, "insert_overlap()\n")
 
         parseKmerCount(overlap, length_overlap, overlap_comp, 0);
@@ -6250,7 +6250,7 @@ void decompress2(char* output_prefix, bool pair_ended, int size_kmer, int size_s
 
     char buff_int[64];
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "decompress() 3")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -6272,7 +6272,7 @@ void decompress2(char* output_prefix, bool pair_ended, int size_kmer, int size_s
     file_recycl2 = fopen(output_prefix_buffer, "rb");
     ASSERT_NULL_PTR(file_recycl2,"decompress() 5")
 
-    traversed_kmer_tmp = calloc(size_kmer + 1, sizeof(char));
+    traversed_kmer_tmp = (char*) calloc(size_kmer + 1, sizeof(char));
     ASSERT_NULL_PTR(traversed_kmer_tmp, "decompress() 1")
 
     //Extract the subgraph
@@ -6299,22 +6299,22 @@ void decompress2(char* output_prefix, bool pair_ended, int size_kmer, int size_s
     unserialize_subpaths_recycling(file_recycl2, &prefix_part_recycl, size_seed,
                                    1, 0xffffffff, false);
 
-    partition_no_iupac = calloc(size_annot_seeds, sizeof(uint8_t));
+    partition_no_iupac = (uint8_t*) calloc(size_annot_seeds, sizeof(uint8_t));
     ASSERT_NULL_PTR(partition_no_iupac, "compressKmers_from_KmerFiles()")
 
-    buf_read_info = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    buf_read_info = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(buf_read_info, "decompress() 2.2")
 
-    kmer_run = malloc((size_kmer + 1) * sizeof(char));
+    kmer_run = (char*) malloc((size_kmer + 1) * sizeof(char));
     ASSERT_NULL_PTR(kmer_run, "decompress() 1")
 
-    traversed_kmer = calloc(size_kmer + 1, sizeof(char));
+    traversed_kmer = (char*) calloc(size_kmer + 1, sizeof(char));
     ASSERT_NULL_PTR(traversed_kmer, "decompress() 1")
 
-    suffix = malloc((size_seed + 1) * sizeof(char));
+    suffix = (char*) malloc((size_seed + 1) * sizeof(char));
     ASSERT_NULL_PTR(suffix, "decompress() 3")
 
-    loaded_part = malloc((DECOMP_NB_MAX_LOAD_PART + 1) * sizeof(uint32_t));
+    loaded_part = (uint32_t*) malloc((DECOMP_NB_MAX_LOAD_PART + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(loaded_part, "decompress() 2")
 
     loaded_part[0] = DECOMP_NB_MAX_LOAD_PART;
@@ -6389,10 +6389,10 @@ void decompress2(char* output_prefix, bool pair_ended, int size_kmer, int size_s
 
     //printf("read_length = %" PRIu32 "\n", read_length);
 
-    read = malloc((size_read_buffer + 2) * sizeof(char));
+    read = (char*) malloc((size_read_buffer + 2) * sizeof(char));
     ASSERT_NULL_PTR(read, "decompress() 3")
 
-    read_rc = malloc((size_read_buffer + 2) * sizeof(char));
+    read_rc = (char*) malloc((size_read_buffer + 2) * sizeof(char));
     ASSERT_NULL_PTR(read_rc, "decompress() 3")
 
     header_shift = get_header_next_subseq_shifted(file_shifts);
@@ -6597,10 +6597,10 @@ void decompress2(char* output_prefix, bool pair_ended, int size_kmer, int size_s
 
                         if (read_length > size_read_buffer){
 
-                            read = realloc(read, (read_length + 2) * sizeof(char));
+                            read = (char*) realloc(read, (read_length + 2) * sizeof(char));
                             ASSERT_NULL_PTR(read, "decompress() 3")
 
-                            read_rc = realloc(read_rc, (read_length + 2) * sizeof(char));
+                            read_rc = (char*) realloc(read_rc, (read_length + 2) * sizeof(char));
                             ASSERT_NULL_PTR(read_rc, "decompress() 3")
 
                             size_read_buffer = read_length;
@@ -6843,7 +6843,7 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
 
     uint8_t tmp;
 
-    uint8_t* seed_ascii = malloc((size_seed + 1) * sizeof(uint8_t));
+    uint8_t* seed_ascii = (uint8_t*) malloc((size_seed + 1) * sizeof(uint8_t));
     ASSERT_NULL_PTR(seed_ascii, "serialize_subpaths_recycling()\n")
 
     uint8_t* seed_present;
@@ -6871,7 +6871,7 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
 
                 recycled_part_size_to_load = MIN(nb_parts_to_load, MAX(0, ((int64_t) recycled_part_size) - load_from_pos_start + 1));
 
-                recycled_part = realloc(recycled_part, (recycled_part[0] + recycled_part_size_to_load + 1) * sizeof(uint32_t));
+                recycled_part = (uint32_t*) realloc(recycled_part, (recycled_part[0] + recycled_part_size_to_load + 1) * sizeof(uint32_t));
                 ASSERT_NULL_PTR(recycled_part, "serialize_subpaths_recycling()\n")
 
                 fseek(file_part_recycl2, MIN(load_from_pos_start-1, recycled_part_size) * sizeof(uint32_t), SEEK_CUR);
@@ -6907,7 +6907,7 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
 
                 recycled_part_size_to_load = MIN(nb_parts_to_load, MAX(0, ((int64_t) recycled_part_size) - load_from_pos_start + 1));
 
-                recycled_part = realloc(recycled_part, (recycled_part[0] + recycled_part_size_to_load + 1) * sizeof(uint32_t));
+                recycled_part = (uint32_t*) realloc(recycled_part, (recycled_part[0] + recycled_part_size_to_load + 1) * sizeof(uint32_t));
                 ASSERT_NULL_PTR(recycled_part, "serialize_subpaths_recycling()\n")
 
                 fseek(file_part_recycl2, MIN(load_from_pos_start-1, recycled_part_size) * sizeof(uint32_t), SEEK_CUR);
@@ -6928,10 +6928,10 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
     }
     else{
 
-        seed_present = calloc(size_seed_present, sizeof(uint8_t));
+        seed_present = (uint8_t*) calloc(size_seed_present, sizeof(uint8_t));
         ASSERT_NULL_PTR(seed_present, "serialize_subpaths_recycling()\n")
 
-        seed_comp = malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
+        seed_comp = (uint8_t*) malloc(nb_bytes_seed_iupac * sizeof(uint8_t));
         ASSERT_NULL_PTR(seed_comp, "serialize_subpaths_recycling()\n")
 
         if (size_seed % 4) seed_shift = SIZE_BITS_UINT_8T - ((size_seed % 4) * 2);
@@ -6968,7 +6968,7 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
 
                         recycled_part_size_to_load = MIN(nb_parts_to_load, MAX(0, ((int64_t) recycled_part_size) - load_from_pos_start + 1));
 
-                        recycled_part = malloc((recycled_part_size_to_load + 1) * sizeof(uint32_t));
+                        recycled_part = (uint32_t*) malloc((recycled_part_size_to_load + 1) * sizeof(uint32_t));
                         ASSERT_NULL_PTR(recycled_part, "unserialize_subpaths_recycling()")
 
                         fseek(file_part_recycl2, MIN(load_from_pos_start-1, recycled_part_size) * sizeof(uint32_t), SEEK_CUR);
@@ -7012,7 +7012,7 @@ uint32_t unserialize_subpaths_recycling(FILE* file_part_recycl2, Pvoid_t* recycl
 
             recycled_part_size_to_load = MIN(nb_parts_to_load, MAX(0, ((int64_t) recycled_part_size) - load_from_pos_start + 1));
 
-            recycled_part = malloc((recycled_part_size_to_load + 1) * sizeof(uint32_t));
+            recycled_part = (uint32_t*) malloc((recycled_part_size_to_load + 1) * sizeof(uint32_t));
             ASSERT_NULL_PTR(recycled_part, "unserialize_subpaths_recycling()")
 
             fseek(file_part_recycl2, MIN(load_from_pos_start-1, recycled_part_size) * sizeof(uint32_t), SEEK_CUR);
@@ -7047,12 +7047,12 @@ void sort_subpaths_recycling(Pvoid_t* recycled_parts, int size_seed, bool replac
     uint32_t it_recycled_part;
     uint32_t it_recycled_part_uniq;
 
-    uint32_t* recycled_part_sorted = calloc(1, sizeof(uint32_t));
+    uint32_t* recycled_part_sorted = (uint32_t*) calloc(1, sizeof(uint32_t));
     ASSERT_NULL_PTR(recycled_part_sorted, "decompress()")
 
     uint32_t* recycled_part_not_sorted;
 
-    uint8_t* seed = calloc(size_seed + 1, sizeof(uint8_t));
+    uint8_t* seed = (uint8_t*) calloc(size_seed + 1, sizeof(uint8_t));
     ASSERT_NULL_PTR(seed, "decompress()")
 
     seed[0] = '\0';
@@ -7069,7 +7069,7 @@ void sort_subpaths_recycling(Pvoid_t* recycled_parts, int size_seed, bool replac
 
                 size_recycled_part_sorted = recycled_part_not_sorted[0]+1;
 
-                recycled_part_sorted = realloc(recycled_part_sorted, size_recycled_part_sorted * sizeof(uint32_t));
+                recycled_part_sorted = (uint32_t*) realloc(recycled_part_sorted, size_recycled_part_sorted * sizeof(uint32_t));
                 ASSERT_NULL_PTR(recycled_part_sorted, "decompress()");
             }
 
@@ -7096,14 +7096,14 @@ void sort_subpaths_recycling(Pvoid_t* recycled_parts, int size_seed, bool replac
 
             if (replace_by_sorted_parts){
 
-                recycled_part_not_sorted = realloc(recycled_part_not_sorted, (recycled_part_sorted[0] + 1) * sizeof(uint32_t));
+                recycled_part_not_sorted = (uint32_t*) realloc(recycled_part_not_sorted, (recycled_part_sorted[0] + 1) * sizeof(uint32_t));
                 ASSERT_NULL_PTR(recycled_part_not_sorted, "unserialize_subpaths_recycling()")
 
                 memcpy(recycled_part_not_sorted, recycled_part_sorted, (recycled_part_sorted[0] + 1) * sizeof(uint32_t));
             }
             else{
 
-                recycled_part_not_sorted = realloc(recycled_part_not_sorted,
+                recycled_part_not_sorted = (uint32_t*) realloc(recycled_part_not_sorted,
                                                    (recycled_part_not_sorted[0] + recycled_part_sorted[0] + 2) * sizeof(uint32_t));
 
                 ASSERT_NULL_PTR(recycled_part_not_sorted, "unserialize_subpaths_recycling()")
@@ -7159,7 +7159,7 @@ char* extract_next_subseq_shifted(FILE* file_shift, bool compress_shift, bool is
 
     char* kmer = NULL;
 
-    kmer = calloc(length + 1, sizeof(char));
+    kmer = (char*) calloc(length + 1, sizeof(char));
     ASSERT_NULL_PTR(kmer, "extract_next_subseq_shifted()\n")
 
     int info;
@@ -7168,7 +7168,7 @@ char* extract_next_subseq_shifted(FILE* file_shift, bool compress_shift, bool is
 
         info = CEIL(length * 4, SIZE_BITS_UINT_8T);
 
-        uint8_t* kmer_comp = calloc(info, sizeof(uint8_t));
+        uint8_t* kmer_comp = (uint8_t*) calloc(info, sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp, "extract_next_subseq_shifted()\n")
 
         if (is_iupac){ //IUPAC
@@ -7263,25 +7263,25 @@ void extract_reads(char* output_prefix, bool paired_end){
 
     List* l = List_create();
 
-    Mismatch* mis = malloc(size_mis * sizeof(Mismatch));
+    Mismatch* mis = (Mismatch*) malloc(size_mis * sizeof(Mismatch));
     ASSERT_NULL_PTR(mis, "binning_reads()\n")
 
-    char* buffer_read = malloc(size_buffer_read * sizeof(char));
+    char* buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "binning_reads()\n")
 
-    char* buffer_rev = malloc(SIZE_BUFFER * sizeof(char));
+    char* buffer_rev = (char*) malloc(SIZE_BUFFER * sizeof(char));
     ASSERT_NULL_PTR(buffer_rev, "binning_reads()\n")
 
-    char* read = malloc(size_read * sizeof(char));
+    char* read = (char*) malloc(size_read * sizeof(char));
     ASSERT_NULL_PTR(read, "binning_reads()\n")
 
-    char* read_tmp = malloc(size_read * sizeof(char));
+    char* read_tmp = (char*) malloc(size_read * sizeof(char));
     ASSERT_NULL_PTR(read_tmp, "binning_reads()\n")
 
-    char* read_rev = malloc(size_read * sizeof(char));
+    char* read_rev = (char*) malloc(size_read * sizeof(char));
     ASSERT_NULL_PTR(read_rev, "binning_reads()\n")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "extract_reads()\n")
 
     strcpy(output_prefix_buffer, output_prefix);
@@ -7368,19 +7368,19 @@ void extract_reads(char* output_prefix, bool paired_end){
 
                     size_read = read_length + 1;
 
-                    read = realloc(read, size_read * sizeof(char));
+                    read = (char*) realloc(read, size_read * sizeof(char));
                     ASSERT_NULL_PTR(read, "extract_reads()\n")
 
-                    read_tmp = realloc(read_tmp, size_read * sizeof(char));
+                    read_tmp = (char*) realloc(read_tmp, size_read * sizeof(char));
                     ASSERT_NULL_PTR(read_tmp, "extract_reads()\n")
 
-                    read_rev = realloc(read_rev, size_read * sizeof(char));
+                    read_rev = (char*) realloc(read_rev, size_read * sizeof(char));
                     ASSERT_NULL_PTR(read_rev, "extract_reads()\n")
                 }
 
                 if (nb_mismatches){
 
-                    mis = malloc(nb_mismatches * sizeof(Mismatch));
+                    mis = (Mismatch*) malloc(nb_mismatches * sizeof(Mismatch));
                     ASSERT_NULL_PTR(mis, "extract_reads()\n")
 
                     for (i = 0; i < nb_mismatches; i++){
@@ -7503,13 +7503,13 @@ void reorder_paired_reads(char* output_prefix){
 
     size_t size_buffer_read = SIZE_BUFFER;
 
-    char* buffer_read = malloc(size_buffer_read * sizeof(char));
+    char* buffer_read = (char*) malloc(size_buffer_read * sizeof(char));
     ASSERT_NULL_PTR(buffer_read, "reorder_paired_reads() 1\n")
 
-    char* output_prefix_buffer = malloc((len_output_prefix + 50) * sizeof(char));
+    char* output_prefix_buffer = (char*) malloc((len_output_prefix + 50) * sizeof(char));
     ASSERT_NULL_PTR(output_prefix_buffer, "reorder_paired_reads() 2\n")
 
-    uint8_t* buffer_mate_info = malloc(SIZE_BUFFER * sizeof(uint8_t));
+    uint8_t* buffer_mate_info = (uint8_t*) malloc(SIZE_BUFFER * sizeof(uint8_t));
     ASSERT_NULL_PTR(buffer_mate_info, "reorder_paired_reads() 3\n")
 
     strcpy(output_prefix_buffer, output_prefix);

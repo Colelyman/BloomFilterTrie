@@ -156,14 +156,14 @@ int main(int argc, char *argv[])
 
             if ((file_input = fopen(argv[4], "r")) == NULL) ERROR("Invalid list_genome_files.\n")
 
-            paths_and_names = malloc(nb_files_2_read * sizeof(char*)); //Allocate the array of paths + filenames
+            paths_and_names = (char**) malloc(nb_files_2_read * sizeof(char*)); //Allocate the array of paths + filenames
             ASSERT_NULL_PTR(paths_and_names,"main()")
 
             i = 0;
 
             while (fgets(buffer, 2048, file_input)){ //Copy the filenames in an array, the paths and filenames in another array
 
-                paths_and_names[i] = malloc((strlen(buffer) + 1) * sizeof(char));
+                paths_and_names[i] = (char*) malloc((strlen(buffer) + 1) * sizeof(char));
                 ASSERT_NULL_PTR(paths_and_names[i], "main()")
 
                 strcpy(paths_and_names[i], buffer);
@@ -218,14 +218,14 @@ int main(int argc, char *argv[])
 
                 if ((file_input = fopen(argv[i+2], "r")) == NULL) ERROR("Invalid list_genome_files.\n")
 
-                paths_and_names = malloc(nb_files_2_read * sizeof(char*)); //Allocate the array of paths + filenames
+                paths_and_names = (char**) malloc(nb_files_2_read * sizeof(char*)); //Allocate the array of paths + filenames
                 ASSERT_NULL_PTR(paths_and_names,"main()")
 
                 j = 0;
 
                 while (fgets(buffer, 2048, file_input)){ //Copy the filenames in an array, the paths and filenames in another array
 
-                    paths_and_names[j] = malloc((strlen(buffer)+1)*sizeof(char));
+                    paths_and_names[j] = (char*) malloc((strlen(buffer)+1)*sizeof(char));
                     ASSERT_NULL_PTR(paths_and_names[j],"main()")
 
                     strcpy(paths_and_names[j], buffer);
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
 
                     buffer[strcspn(buffer, "\r\n")] = 0;
 
-                    filename_output = malloc((strlen(basename(buffer))+4) * sizeof(char));
+                    filename_output = (char*) malloc((strlen(basename(buffer))+4) * sizeof(char));
                     ASSERT_NULL_PTR(filename_output, "main()")
 
                     strcpy(filename_output, basename(buffer));
@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 
                     buffer[strcspn(buffer, "\r\n")] = '\0';
 
-                    filename_output = malloc((strlen(basename(buffer))+4) * sizeof(char));
+                    filename_output = (char*) malloc((strlen(basename(buffer))+4) * sizeof(char));
                     ASSERT_NULL_PTR(filename_output, "main()")
 
                     strcpy(filename_output, basename(buffer));

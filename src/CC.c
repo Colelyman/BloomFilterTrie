@@ -79,10 +79,10 @@ void transform2CC(UC*  uc, CC*  cc, BFT_Root* root, int lvl_cc, int size_suffix)
 
     int* new_order;
 
-    uint8_t* substrings = malloc(root->info_per_lvl[lvl_cc].nb_kmers_uc * SIZE_BYTES_SUF_PREF * sizeof(uint8_t));
+    uint8_t* substrings = (uint8_t*) malloc(root->info_per_lvl[lvl_cc].nb_kmers_uc * SIZE_BYTES_SUF_PREF * sizeof(uint8_t));
     ASSERT_NULL_PTR(substrings,"transform2CC()")
 
-    uint8_t* sub_equal = calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc, sizeof(uint8_t));
+    uint8_t* sub_equal = (uint8_t*) calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc, sizeof(uint8_t));
     ASSERT_NULL_PTR(sub_equal,"transform2CC()")
 
     UC_SIZE_ANNOT_T *annot_sizes = min_size_per_sub(uc->suffixes, root->info_per_lvl[lvl_cc].nb_kmers_uc, nb_cell, uc->size_annot);
@@ -161,13 +161,13 @@ void transform2CC(UC*  uc, CC*  cc, BFT_Root* root, int lvl_cc, int size_suffix)
                 z++;
             }
 
-            cc->children = realloc(cc->children, (it_children+1)*sizeof(UC));
+            cc->children = (UC*) realloc(cc->children, (it_children+1)*sizeof(UC));
             ASSERT_NULL_PTR(cc->children,"transform2CC()")
 
             uc_tmp = &(((UC*)cc->children)[it_children]);
             initializeUC(uc_tmp);
 
-            uc_tmp->suffixes = calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
+            uc_tmp->suffixes = (uint8_t*) calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
             ASSERT_NULL_PTR(uc_tmp->suffixes,"transform2CC()")
 
             uc_tmp->size_annot = k;
@@ -186,13 +186,13 @@ void transform2CC(UC*  uc, CC*  cc, BFT_Root* root, int lvl_cc, int size_suffix)
         z++;
     }
 
-    cc->children = realloc(cc->children, (it_children+1)*sizeof(UC));
+    cc->children = (UC*) realloc(cc->children, (it_children+1)*sizeof(UC));
     ASSERT_NULL_PTR(cc->children,"transform2CC()")
 
     uc_tmp = &(((UC*)cc->children)[it_children]);
     initializeUC(uc_tmp);
 
-    uc_tmp->suffixes = calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
+    uc_tmp->suffixes = (uint8_t*) calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
     ASSERT_NULL_PTR(uc_tmp->suffixes,"transform2CC()")
 
     uc_tmp->size_annot = k;
@@ -201,11 +201,11 @@ void transform2CC(UC*  uc, CC*  cc, BFT_Root* root, int lvl_cc, int size_suffix)
     k = -1;
 
     //Allocates memory for fields filter3 and extra_filter3 into the CC
-    cc->filter3 = malloc(nb_substrings_different*sizeof(uint8_t));
+    cc->filter3 = (uint8_t*) malloc(nb_substrings_different*sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->filter3,"transform2CC()")
 
     if (root->info_per_lvl[lvl_cc].level_min == 1){
-        cc->extra_filter3 = calloc(CEIL(nb_substrings_different, SIZE_BITS_UINT_8T),sizeof(uint8_t));
+        cc->extra_filter3 = (uint8_t*) calloc(CEIL(nb_substrings_different, SIZE_BITS_UINT_8T),sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->extra_filter3,"transform2CC()")
     }
 
@@ -239,7 +239,7 @@ void transform2CC(UC*  uc, CC*  cc, BFT_Root* root, int lvl_cc, int size_suffix)
             //Update SkipFilter3 when a multiple of 248 unique prefix were inserted
             if (k % root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3 == root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3 - 1){
                 int new_size = (SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T)+((k+1)/root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3);
-                cc->BF_filter2 = realloc(cc->BF_filter2, (size_bf+new_size)*sizeof(uint8_t));
+                cc->BF_filter2 = (uint8_t*) realloc(cc->BF_filter2, (size_bf+new_size)*sizeof(uint8_t));
                 cc->BF_filter2[size_bf+new_size-1] = (uint8_t)nb_1;
                 nb_1 = 0;
             }
@@ -396,16 +396,16 @@ void transform2CC_from_arraySuffix(uint8_t*  array_suffix, CC*  cc, BFT_Root* ro
     uint8_t bit_new_suf;
     uint8_t type = (cc->type >> 6) & 0x1;
 
-    uint8_t* substrings = malloc(root->info_per_lvl[lvl_cc].nb_kmers_uc*SIZE_BYTES_SUF_PREF*sizeof(uint8_t));
+    uint8_t* substrings = (uint8_t*) malloc(root->info_per_lvl[lvl_cc].nb_kmers_uc*SIZE_BYTES_SUF_PREF*sizeof(uint8_t));
     ASSERT_NULL_PTR(substrings, "transform2CC_from_arraySuffix()")
 
-    uint8_t* sub_equal = calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc,sizeof(uint8_t));
+    uint8_t* sub_equal = (uint8_t*) calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc,sizeof(uint8_t));
     ASSERT_NULL_PTR(sub_equal, "transform2CC_from_arraySuffix()")
 
     UC_SIZE_ANNOT_T *annot_sizes = min_size_per_sub(array_suffix, root->info_per_lvl[lvl_cc].nb_kmers_uc, nb_cell, size_annot);
     ASSERT_NULL_PTR(annot_sizes, "transform2CC_from_arraySuffix()")
 
-    UC_SIZE_ANNOT_CPLX_T *annot_sizes_cplx = calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc,sizeof( UC_SIZE_ANNOT_CPLX_T ));
+    UC_SIZE_ANNOT_CPLX_T *annot_sizes_cplx = (UC_SIZE_ANNOT_CPLX_T *) calloc(root->info_per_lvl[lvl_cc].nb_kmers_uc,sizeof( UC_SIZE_ANNOT_CPLX_T ));
     ASSERT_NULL_PTR(annot_sizes_cplx, "transform2CC_from_arraySuffix()")
 
     int cmp = 0;
@@ -494,13 +494,13 @@ void transform2CC_from_arraySuffix(uint8_t*  array_suffix, CC*  cc, BFT_Root* ro
                 z++;
             }
 
-            cc->children = realloc(cc->children, (it_children+1)*sizeof(UC));
+            cc->children = (UC*) realloc(cc->children, (it_children+1)*sizeof(UC));
             ASSERT_NULL_PTR(cc->children,"transform2CC_from_arraySuffix()")
 
             uc = &(((UC*)cc->children)[it_children]);
             initializeUC(uc);
 
-            uc->suffixes = calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
+            uc->suffixes = (uint8_t*) calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes,"transform2CC_from_arraySuffix()")
 
             uc->size_annot = k;
@@ -519,13 +519,13 @@ void transform2CC_from_arraySuffix(uint8_t*  array_suffix, CC*  cc, BFT_Root* ro
         z++;
     }
 
-    cc->children = realloc(cc->children, (it_children+1)*sizeof(UC));
+    cc->children = (UC*) realloc(cc->children, (it_children+1)*sizeof(UC));
     ASSERT_NULL_PTR(cc->children,"transform2CC_from_arraySuffix()")
 
     uc = &(((UC*)cc->children)[it_children]);
     initializeUC(uc);
 
-    uc->suffixes = calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
+    uc->suffixes = (uint8_t*) calloc((i-begin_clust)*(nb_cell_children+k), sizeof(uint8_t));
     ASSERT_NULL_PTR(uc->suffixes,"transform2CC_from_arraySuffix()")
 
     uc->size_annot = k;
@@ -533,11 +533,11 @@ void transform2CC_from_arraySuffix(uint8_t*  array_suffix, CC*  cc, BFT_Root* ro
 
     k = -1;
 
-    cc->filter3 = malloc(nb_substrings_different*sizeof(uint8_t));
+    cc->filter3 = (uint8_t*) malloc(nb_substrings_different*sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->filter3,"transform2CC_from_arraySuffix()")
 
     if (root->info_per_lvl[lvl_cc].level_min == 1){
-        cc->extra_filter3 = calloc(CEIL(nb_substrings_different, SIZE_BITS_UINT_8T),sizeof(uint8_t));
+        cc->extra_filter3 = (uint8_t*) calloc(CEIL(nb_substrings_different, SIZE_BITS_UINT_8T),sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->extra_filter3,"transform2CC_from_arraySuffix()")
     }
 
@@ -572,7 +572,7 @@ void transform2CC_from_arraySuffix(uint8_t*  array_suffix, CC*  cc, BFT_Root* ro
 
             if (k % root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3 == root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3 - 1){
                 int new_size = (SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T)+((k+1)/root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter3);
-                cc->BF_filter2 = realloc(cc->BF_filter2, (new_size+size_bf)*sizeof(uint8_t));
+                cc->BF_filter2 = (uint8_t*) realloc(cc->BF_filter2, (new_size+size_bf)*sizeof(uint8_t));
                 cc->BF_filter2[size_bf+new_size-1] = (uint8_t)nb_1;
                 nb_1 = 0;
             }
@@ -1169,11 +1169,11 @@ void insertSP_CC(resultPresence*  pres, BFT_Root* root, int lvl_node_insert,
 
     //Realloc the size of the list in the filter3
     if (suf==8){
-        cc->filter3 = realloc(cc->filter3, (cc->nb_elem+1)*sizeof(uint8_t));
+        cc->filter3 = (uint8_t*) realloc(cc->filter3, (cc->nb_elem+1)*sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->filter3,"insertSP_CC()")
     }
     else if (cc->nb_elem%2 == 0){
-        cc->filter3 = realloc(cc->filter3, ((cc->nb_elem/2)+1)*sizeof(uint8_t));
+        cc->filter3 = (uint8_t*) realloc(cc->filter3, ((cc->nb_elem/2)+1)*sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->filter3,"insertSP_CC()")
         cc->filter3[(cc->nb_elem/2)] = 0;
     }
@@ -1210,7 +1210,7 @@ void insertSP_CC(resultPresence*  pres, BFT_Root* root, int lvl_node_insert,
     if (info_per_lvl->level_min == 1){
         if (nb_cell_3rdlist*SIZE_BITS_UINT_8T == cc->nb_elem){
             nb_cell_3rdlist++;
-            cc->extra_filter3 = realloc(cc->extra_filter3, nb_cell_3rdlist*sizeof(uint8_t));
+            cc->extra_filter3 = (uint8_t*) realloc(cc->extra_filter3, nb_cell_3rdlist*sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->extra_filter3,"insertSP_CC()")
             cc->extra_filter3[nb_cell_3rdlist-1] = 0;
         }
@@ -1362,7 +1362,7 @@ void insertSP_CC(resultPresence*  pres, BFT_Root* root, int lvl_node_insert,
         if ((cc->nb_elem%info_per_lvl->nb_bits_per_cell_skip_filter3 == 0) && (cc->nb_elem >= info_per_lvl->nb_bits_per_cell_skip_filter3)){
 
             int new_cell = size_filter2_n_skip+(cc->nb_elem/info_per_lvl->nb_bits_per_cell_skip_filter3);
-            cc->BF_filter2 = realloc(cc->BF_filter2, new_cell*sizeof(uint8_t));
+            cc->BF_filter2 = (uint8_t*) realloc(cc->BF_filter2, new_cell*sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->BF_filter2,"insertSP_CC()")
             cc->BF_filter2[new_cell-1] = popcnt_8_par(cc->extra_filter3, nb_cell_3rdlist - info_per_lvl->nb_bytes_per_cell_skip_filter3, nb_cell_3rdlist);
         }
@@ -1421,7 +1421,7 @@ void insertSP_CC(resultPresence*  pres, BFT_Root* root, int lvl_node_insert,
 
             int new_cell = size_filter2_n_skip + cc->nb_elem / info_per_lvl->nb_bits_per_cell_skip_filter3;
 
-            cc->BF_filter2 = realloc(cc->BF_filter2, new_cell*sizeof(uint8_t));
+            cc->BF_filter2 = (uint8_t*) realloc(cc->BF_filter2, new_cell*sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->BF_filter2,"insertSP_CC()")
 
             tmp = new_cell-1;
@@ -1506,7 +1506,7 @@ void transform_Filter2n3(CC* cc, int pref_size, int suf_size, info_per_level*  i
 
     //Allocation of memory for the new filter 2, we can re-write on the filter 3 and extra filter 3
     //The order of suffixes stays the same in the Filter 3
-    uint8_t* filter2_tmp = calloc(size_filter2_n_skip+skip_filter_3, sizeof(uint8_t));
+    uint8_t* filter2_tmp = (uint8_t*) calloc(size_filter2_n_skip+skip_filter_3, sizeof(uint8_t));
     ASSERT_NULL_PTR(filter2_tmp,"transform_Filter2n3()")
 
     if (suf_size==4){
@@ -1649,8 +1649,8 @@ void transform_Filter2n3(CC* cc, int pref_size, int suf_size, info_per_level*  i
         }
 
         //Minimizes the memory required by the Filter 3
-        if (IS_ODD(cc->nb_elem)) cc->filter3 = realloc(cc->filter3, ((cc->nb_elem/2)+1)*sizeof(uint8_t));
-        else cc->filter3 = realloc(cc->filter3, (cc->nb_elem/2)*sizeof(uint8_t));
+        if (IS_ODD(cc->nb_elem)) cc->filter3 = (uint8_t*) realloc(cc->filter3, ((cc->nb_elem/2)+1)*sizeof(uint8_t));
+        else cc->filter3 = (uint8_t*) realloc(cc->filter3, (cc->nb_elem/2)*sizeof(uint8_t));
 
         ASSERT_NULL_PTR(cc->filter3,"transform_Filter2n3()")
 
@@ -1699,7 +1699,7 @@ int add_skp_annotation(CC* cc, int position_type, int size_annot, info_per_level
     int start = position_type/info_per_level->nb_ucs_skp;
 
     if (cc->nb_elem%info_per_level->nb_ucs_skp == 0){
-        cc->children = realloc(cc->children, nb_cell_skp*sizeof(UC));
+        cc->children = (UC*) realloc(cc->children, nb_cell_skp*sizeof(UC));
         ASSERT_NULL_PTR(cc->children, "add_skp_annotation()")
 
         uc = &(((UC*)cc->children)[nb_cell_skp-1]);
@@ -1720,7 +1720,7 @@ int add_skp_annotation(CC* cc, int position_type, int size_annot, info_per_level
 
             if (size_annot > uc->size_annot){
                 if (nb_children == 0){
-                    uc->suffixes = calloc(size_annot, sizeof(uint8_t));
+                    uc->suffixes = (uint8_t*) calloc(size_annot, sizeof(uint8_t));
                     uc->size_annot = size_annot;
                 }
                 else realloc_annotation(uc, 0, nb_children, size_annot, 1, position_child);
@@ -1734,13 +1734,13 @@ int add_skp_annotation(CC* cc, int position_type, int size_annot, info_per_level
 
                 if ((max_size_z > 0) && (uc->nb_extended_annot == 0) && (max_size_z < uc->size_annot)){
                     if (nb_children == 0){
-                        uc->suffixes = calloc(max_size_z, sizeof(uint8_t));
+                        uc->suffixes = (uint8_t*) calloc(max_size_z, sizeof(uint8_t));
                         uc->size_annot = max_size_z;
                     }
                     else realloc_annotation(uc, 0, nb_children, max_size_z, 1, position_child);
                 }
                 else {
-                    uc->suffixes = realloc(uc->suffixes, ((nb_children+1) * uc->size_annot + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
+                    uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_children+1) * uc->size_annot + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                             + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
                     ASSERT_NULL_PTR(uc->suffixes, "add_skp_annotation()")
 
@@ -1753,7 +1753,7 @@ int add_skp_annotation(CC* cc, int position_type, int size_annot, info_per_level
                 }
             }
             else {
-                uc->suffixes = realloc(uc->suffixes, ((nb_children + 1) * uc->size_annot + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_children + 1) * uc->size_annot + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                         + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "add_skp_annotation()")
 
@@ -1821,7 +1821,7 @@ int add_skp_annotation(CC* cc, int position_type, int size_annot, info_per_level
 
             nb_children++;
 
-            uc->suffixes = realloc(uc->suffixes, ((nb_children * uc->size_annot) + (uc->nb_extended_annot + cpt) * SIZE_BYTE_EXT_ANNOT
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_children * uc->size_annot) + (uc->nb_extended_annot + cpt) * SIZE_BYTE_EXT_ANNOT
                                     + (uc->nb_cplx_nodes + cpt_cplx) * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes, "add_skp_annotation()")
 
@@ -1888,7 +1888,7 @@ info_per_level* create_info_per_level(int size_max){
 
     for (i = NB_CHAR_SUF_PREF, nb_sizes = 0; i <= size_max; i += NB_CHAR_SUF_PREF, nb_sizes++){
 
-        ptr = realloc(ptr, (nb_sizes+1)*sizeof(info_per_level));
+        ptr = (info_per_level*) realloc(ptr, (nb_sizes+1)*sizeof(info_per_level));
         ASSERT_NULL_PTR(ptr,"create_info_per_level()")
 
         ptr[nb_sizes].nb_ucs_skp = NB_UC_PER_SKP;
@@ -2039,7 +2039,7 @@ void add_skp_children(CC* cc, int position_type, int position_child, int count_b
     int start = position_type/info_per_lvl->nb_ucs_skp;
 
     if (cc->nb_elem%info_per_lvl->nb_ucs_skp == 0){
-        cc->children = realloc(cc->children, nb_cell_skp*sizeof(UC));
+        cc->children = (UC*) realloc(cc->children, nb_cell_skp*sizeof(UC));
         ASSERT_NULL_PTR(cc->children, "add_skp_children()")
 
         uc = &(((UC*)cc->children)[nb_cell_skp-1]);
@@ -2056,7 +2056,7 @@ void add_skp_children(CC* cc, int position_type, int position_child, int count_b
 
             if (size_annot > uc->size_annot){
                 if (uc->nb_children == 0){
-                    uc->suffixes = calloc(size_substrings + size_annot, sizeof(uint8_t));
+                    uc->suffixes = (uint8_t*) calloc(size_substrings + size_annot, sizeof(uint8_t));
                     uc->size_annot = size_annot;
                 }
                 else realloc_annotation(uc, size_substrings, uc->nb_children, size_annot, 1, position_child);
@@ -2070,14 +2070,14 @@ void add_skp_children(CC* cc, int position_type, int position_child, int count_b
 
                 if ((max_size_z > 0) && (uc->nb_extended_annot == 0) && (max_size_z < uc->size_annot)){
                     if (uc->nb_children == 0){
-                        uc->suffixes = calloc(size_substrings + max_size_z, sizeof(uint8_t));
+                        uc->suffixes = (uint8_t*) calloc(size_substrings + max_size_z, sizeof(uint8_t));
                         uc->size_annot = max_size_z;
                     }
                     else realloc_annotation(uc, size_substrings, uc->nb_children, max_size_z, 1, position_child);
                 }
                 else {
                     size_line_children = size_substrings + uc->size_annot;
-                    uc->suffixes = realloc(uc->suffixes, ((uc->nb_children+1) * size_line_children + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
+                    uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((uc->nb_children+1) * size_line_children + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                                           + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
                     ASSERT_NULL_PTR(uc->suffixes, "add_skp_children()")
 
@@ -2093,7 +2093,7 @@ void add_skp_children(CC* cc, int position_type, int position_child, int count_b
             }
             else {
                 size_line_children = size_substrings + uc->size_annot;
-                uc->suffixes = realloc(uc->suffixes, ((uc->nb_children + 1) * size_line_children + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((uc->nb_children + 1) * size_line_children + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                                       + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "add_skp_children()")
 
@@ -2184,7 +2184,7 @@ void add_skp_children(CC* cc, int position_type, int position_child, int count_b
 
                 uc->nb_children += count2push;
 
-                uc->suffixes = realloc(uc->suffixes,
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes,
                                     ((uc->nb_children * size_line_children) + (uc->nb_extended_annot + cpt_annot_extend_z) * SIZE_BYTE_EXT_ANNOT
                                      + (uc->nb_cplx_nodes + cpt_annot_cplx_z) * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes)) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "add_skp_children()")
@@ -2310,7 +2310,7 @@ uint16_t** build_skip_nodes(Node* node){
     while ((((CC*)node->CC_array)[node_nb_elem].type & 0x1) == 0) node_nb_elem++;
     node_nb_elem++;
 
-    nodes_skip = malloc(node_nb_elem*sizeof(uint16_t*));
+    nodes_skip = (uint16_t**) malloc(node_nb_elem*sizeof(uint16_t*));
     ASSERT_NULL_PTR(nodes_skip,"build_skip_nodes()")
 
     for (i=0; i<node_nb_elem; i++){
@@ -2318,7 +2318,7 @@ uint16_t** build_skip_nodes(Node* node){
         cc = &(((CC*)node->CC_array)[i]);
         nb_skp = cc->nb_elem / SIZE_CLUST_SKIP_NODES;
 
-        nodes_skip[i] = malloc(nb_skp*sizeof(uint16_t));
+        nodes_skip[i] = (uint16_t*) malloc(nb_skp*sizeof(uint16_t));
         ASSERT_NULL_PTR(nodes_skip[i],"build_skip_nodes()")
 
         for (j=0; j<nb_skp; j++){

@@ -323,7 +323,7 @@ static int BMK_benchFiles(const char** fileNamesTable, int nbFiles)
 static int BMK_benchInternal(void)
 {
     size_t const benchedSize = g_sampleSize;
-    void* const buffer = calloc(benchedSize+3, 1);
+    void* const buffer = (void*) calloc(benchedSize+3, 1);
     if(!buffer) {
         DISPLAY("\nError: not enough memory!\n");
         return 12;
@@ -530,7 +530,7 @@ static int BMK_hash(const char* fileName,
     }
 
     /* Memory allocation & restrictions */
-    buffer = malloc(blockSize);
+    buffer = (void*) malloc(blockSize);
     if(!buffer) {
         DISPLAY("\nError: not enough memory!\n");
         fclose(inFile);

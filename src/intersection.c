@@ -54,7 +54,7 @@ uint32_t* intersection_uint32(uint32_t* list_a, uint32_t* list_b){
     uint32_t i = 1, j = 1, it = 0;
     uint32_t size_a = list_a[0]+1, size_b = list_b[0]+1;
 
-    uint32_t* list_c = malloc(MIN(size_a, size_b) * sizeof(uint32_t));
+    uint32_t* list_c = (uint32_t*) malloc(MIN(size_a, size_b) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "union_lists_uint32() 1\n")
 
     while (i < size_a && j < size_b){
@@ -91,7 +91,7 @@ int comp_uint64(const void *a, const void *b)  {
  */
 uint32_t* intersection_uint32_SIMD(uint32_t* list_a, uint32_t* list_b) {
 
-    uint32_t* list_c = calloc(CEIL(MIN(list_a[0], list_b[0]) + 1, 4) * 4, sizeof(uint32_t));
+    uint32_t* list_c = (uint32_t*) calloc(CEIL(MIN(list_a[0], list_b[0]) + 1, 4) * 4, sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "intersection_uint32_SIMD()");
 
     uint32_t* A = &(list_a[1]);
@@ -155,7 +155,7 @@ uint32_t* intersection_uint32_SIMD(uint32_t* list_a, uint32_t* list_b) {
 
     list_c[0] = count;
 
-    list_c = realloc(list_c, (count + 1) * sizeof(uint32_t));
+    list_c = (uint32_t*) realloc(list_c, (count + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "intersection_uint32_SIMD()");
 
     return list_c;
@@ -297,7 +297,7 @@ uint64_t* union_lists_uint64(uint64_t* list_a, uint64_t* list_b){
 
     uint64_t size_a = list_a[0]+1, size_b = list_b[0]+1;
 
-    uint64_t* list_c = malloc((size_a + size_b) * sizeof(uint64_t));
+    uint64_t* list_c = (uint64_t*) malloc((size_a + size_b) * sizeof(uint64_t));
     ASSERT_NULL_PTR(list_c, "union_lists_uint64() 1\n")
 
     list_c[0] = 0;
@@ -332,7 +332,7 @@ uint64_t* union_lists_uint64(uint64_t* list_a, uint64_t* list_b){
         j++;
     }
 
-    list_c = realloc(list_c, (list_c[0] + 1) * sizeof(uint64_t));
+    list_c = (uint64_t*) realloc(list_c, (list_c[0] + 1) * sizeof(uint64_t));
     ASSERT_NULL_PTR(list_c, "union_lists_uint64() 2\n")
 
     return list_c;
@@ -346,7 +346,7 @@ uint32_t* union_lists_uint32(uint32_t* list_a, uint32_t* list_b){
     uint32_t i = 1, j = 1, it = 0;
     uint32_t size_a = list_a[0], size_b = list_b[0];
 
-    uint32_t* list_c = malloc((size_a + size_b + 1) * sizeof(uint32_t));
+    uint32_t* list_c = (uint32_t*) malloc((size_a + size_b + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "union_lists_uint32() 1\n")
 
     while (i <= size_a && j <= size_b){
@@ -381,7 +381,7 @@ uint32_t* union_lists_uint32(uint32_t* list_a, uint32_t* list_b){
 
     list_c[0] = it;
 
-    list_c = realloc(list_c, (list_c[0] + 1) * sizeof(uint32_t));
+    list_c = (uint32_t*) realloc(list_c, (list_c[0] + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "union_lists_uint32() 2\n")
 
     return list_c;

@@ -57,7 +57,7 @@ void insert_kmers_new_genome(int nb_kmers, char** kmers, char* genome_name, BFT*
 
             nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
 
-            kmer_comp = malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
+            kmer_comp = (uint8_t*) malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
             ASSERT_NULL_PTR(kmer_comp,"insert_kmers_new_genome()\n")
 
             size_id_genome = get_nb_bytes_power2_annot(bft->nb_genomes-1);
@@ -98,7 +98,7 @@ void insert_kmers_last_genome(int nb_kmers, char** kmers, BFT* bft){
 
                 nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
 
-                kmer_comp = malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
+                kmer_comp = (uint8_t*) malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
                 ASSERT_NULL_PTR(kmer_comp,"insert_kmers_last_genome()\n")
 
                 size_id_genome = get_nb_bytes_power2_annot(bft->nb_genomes-1);
@@ -132,13 +132,13 @@ BFT_kmer* create_kmer(const char* kmer, int k){
 
     if (strlen(kmer) != k) ERROR("create_kmer(): k-mer length is not the one used in the graph.\n")
 
-    BFT_kmer* bft_kmer = malloc(sizeof(BFT_kmer));
+    BFT_kmer* bft_kmer = (BFT_kmer*) malloc(sizeof(BFT_kmer));
     ASSERT_NULL_PTR(bft_kmer, "create_kmer()\n")
 
-    bft_kmer->kmer = malloc((k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "create_kmer()\n")
 
-    bft_kmer->kmer_comp = calloc(CEIL(k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(CEIL(k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "create_kmer()\n")
 
     memcpy(bft_kmer->kmer, kmer, k * sizeof(char));
@@ -146,7 +146,7 @@ BFT_kmer* create_kmer(const char* kmer, int k){
 
     if (parseKmerCount(bft_kmer->kmer, k, bft_kmer->kmer_comp, 0)){
 
-        bft_kmer->res = malloc(sizeof(resultPresence));
+        bft_kmer->res = (resultPresence*) malloc(sizeof(resultPresence));
         ASSERT_NULL_PTR(bft_kmer->res, "create_kmer()\n");
 
         initialize_resultPresence(bft_kmer->res);
@@ -162,7 +162,7 @@ BFT_kmer* create_kmer(const char* kmer, int k){
 */
 BFT_kmer* create_empty_kmer(){
 
-    BFT_kmer* bft_kmer = malloc(sizeof(BFT_kmer));
+    BFT_kmer* bft_kmer = (BFT_kmer*) malloc(sizeof(BFT_kmer));
     ASSERT_NULL_PTR(bft_kmer, "create_empty_kmer()\n")
 
     bft_kmer->kmer = NULL;
@@ -218,13 +218,13 @@ BFT_kmer* get_kmer(const char* kmer, BFT* bft){
     ASSERT_NULL_PTR(kmer, "get_kmer()\n")
     ASSERT_NULL_PTR(bft, "get_kmer()\n")
 
-    BFT_kmer* bft_kmer = malloc(sizeof(BFT_kmer));
+    BFT_kmer* bft_kmer = (BFT_kmer*) malloc(sizeof(BFT_kmer));
     ASSERT_NULL_PTR(bft_kmer, "isKmer_in_cdbg()\n")
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "get_kmer()\n")
 
-    bft_kmer->kmer_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "get_kmer()\n")
 
     memcpy(bft_kmer->kmer, kmer, bft->k * sizeof(char));
@@ -325,7 +325,7 @@ size_t write_kmer_comp_to_disk(BFT_kmer* bft_kmer, BFT* bft, va_list args){
  /** Function creating an empty BFT_annotation. */
 inline BFT_annotation* create_BFT_annotation(){
 
-    BFT_annotation* bft_annot = malloc(sizeof(BFT_annotation));
+    BFT_annotation* bft_annot = (BFT_annotation*) malloc(sizeof(BFT_annotation));
     ASSERT_NULL_PTR(bft_annot, "create_BFT_annotation()\n")
 
     bft_annot->annot = NULL;
@@ -629,7 +629,7 @@ uint32_t* get_list_id_genomes(BFT_annotation* bft_annot, BFT* bft){
     get_id_genomes_from_annot(bft->ann_inf, bft->comp_set_colors, bft_annot->annot, bft_annot->size_annot,
                               bft_annot->annot_ext, size_annot_ext);
 
-    uint32_t* ids = malloc((bft->ann_inf->nb_id_stored + 1) * sizeof(uint32_t));
+    uint32_t* ids = (uint32_t*) malloc((bft->ann_inf->nb_id_stored + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(ids, "get_list_id_genomes()\n")
 
     ids[0] = bft->ann_inf->nb_id_stored;
@@ -665,7 +665,7 @@ uint32_t* intersection_list_id_genomes(uint32_t* list_a, uint32_t* list_b){
 
     uint32_t size_a = list_a[0]+1, size_b = list_b[0]+1;
 
-    uint32_t* list_c = malloc(MIN(size_a, size_b) * sizeof(uint32_t));
+    uint32_t* list_c = (uint32_t*) malloc(MIN(size_a, size_b) * sizeof(uint32_t));
     ASSERT_NULL_PTR(list_c, "intersection_list_id_genomes()\n")
 
     list_c[0] = 0;
@@ -811,9 +811,9 @@ BFT_kmer* get_neighbors(BFT_kmer* bft_kmer, BFT* bft){
         int lvl_root = (bft->k / NB_CHAR_SUF_PREF) - 1;
         int nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
 
-        BFT_kmer* neighbors = malloc(8 * sizeof(BFT_kmer));
+        BFT_kmer* neighbors = (BFT_kmer*) malloc(8 * sizeof(BFT_kmer));
 
-        uint8_t* kmer_comp_tmp = malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
+        uint8_t* kmer_comp_tmp = (uint8_t*) malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp_tmp, "get_neighbors()\n")
 
         memcpy(kmer_comp_tmp, bft_kmer->kmer_comp, nb_bytes_kmer_comp * sizeof(uint8_t));
@@ -822,15 +822,15 @@ BFT_kmer* get_neighbors(BFT_kmer* bft_kmer, BFT* bft){
 
         for (int i = 0; i < 4; i++){
 
-            neighbors[i].res = malloc(sizeof(resultPresence));
+            neighbors[i].res = (resultPresence*) malloc(sizeof(resultPresence));
             ASSERT_NULL_PTR(neighbors[i].res, "get_neighbors()\n")
 
             memcpy(neighbors[i].res, &(neigh_res[i]), sizeof(resultPresence));
 
-            neighbors[i].kmer = malloc((bft->k + 1) * sizeof(char));
+            neighbors[i].kmer = (char*) malloc((bft->k + 1) * sizeof(char));
             ASSERT_NULL_PTR(neighbors[i].kmer, "get_neighbors()\n")
 
-            neighbors[i].kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+            neighbors[i].kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
             ASSERT_NULL_PTR(neighbors[i].kmer_comp, "get_neighbors()\n")
 
             switch(i){
@@ -853,15 +853,15 @@ BFT_kmer* get_neighbors(BFT_kmer* bft_kmer, BFT* bft){
 
         for (int i = 4; i < 8; i++){
 
-            neighbors[i].res = malloc(sizeof(resultPresence));
+            neighbors[i].res = (resultPresence*) malloc(sizeof(resultPresence));
             ASSERT_NULL_PTR(neighbors[i].res, "get_neighbors()\n")
 
             memcpy(neighbors[i].res, &(neigh_res[i-4]), sizeof(resultPresence));
 
-            neighbors[i].kmer = malloc((bft->k + 1) * sizeof(char));
+            neighbors[i].kmer = (char*) malloc((bft->k + 1) * sizeof(char));
             ASSERT_NULL_PTR(neighbors[i].kmer, "get_neighbors()\n")
 
-            neighbors[i].kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+            neighbors[i].kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
             ASSERT_NULL_PTR(neighbors[i].kmer_comp, "get_neighbors()\n")
 
             memcpy(neighbors[i].kmer, &(bft_kmer->kmer[1]), (bft->k - 1) * sizeof(char));
@@ -900,9 +900,9 @@ BFT_kmer* get_predecessors(BFT_kmer* bft_kmer, BFT* bft){
         int lvl_root = (bft->k / NB_CHAR_SUF_PREF) - 1;
         int nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
 
-        BFT_kmer* predecessors = malloc(4 * sizeof(BFT_kmer));
+        BFT_kmer* predecessors = (BFT_kmer*) malloc(4 * sizeof(BFT_kmer));
 
-        uint8_t* kmer_comp_tmp = malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
+        uint8_t* kmer_comp_tmp = (uint8_t*) malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp_tmp, "get_predecessors()\n")
 
         memcpy(kmer_comp_tmp, bft_kmer->kmer_comp, nb_bytes_kmer_comp * sizeof(uint8_t));
@@ -911,15 +911,15 @@ BFT_kmer* get_predecessors(BFT_kmer* bft_kmer, BFT* bft){
 
         for (int i = 0; i < 4; i++){
 
-            predecessors[i].res = malloc(sizeof(resultPresence));
+            predecessors[i].res = (resultPresence*) malloc(sizeof(resultPresence));
             ASSERT_NULL_PTR(predecessors[i].res, "get_predecessors()\n")
 
             memcpy(predecessors[i].res, &(pred[i]), sizeof(resultPresence));
 
-            predecessors[i].kmer = malloc((bft->k + 1) * sizeof(char));
+            predecessors[i].kmer = (char*) malloc((bft->k + 1) * sizeof(char));
             ASSERT_NULL_PTR(predecessors[i].kmer, "get_predecessors()\n")
 
-            predecessors[i].kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+            predecessors[i].kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
             ASSERT_NULL_PTR(predecessors[i].kmer_comp, "get_predecessors()\n")
 
             switch(i){
@@ -958,9 +958,9 @@ BFT_kmer* get_successors(BFT_kmer* bft_kmer, BFT* bft){
         int lvl_root = (bft->k / NB_CHAR_SUF_PREF) - 1;
         int nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
 
-        BFT_kmer* successors = malloc(4 * sizeof(BFT_kmer));
+        BFT_kmer* successors = (BFT_kmer*) malloc(4 * sizeof(BFT_kmer));
 
-        uint8_t* kmer_comp_tmp = malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
+        uint8_t* kmer_comp_tmp = (uint8_t*) malloc(nb_bytes_kmer_comp * sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp_tmp, "get_successors()\n")
 
         memcpy(kmer_comp_tmp, bft_kmer->kmer_comp, nb_bytes_kmer_comp * sizeof(uint8_t));
@@ -969,15 +969,15 @@ BFT_kmer* get_successors(BFT_kmer* bft_kmer, BFT* bft){
 
         for (int i = 0; i < 4; i++){
 
-            successors[i].res = malloc(sizeof(resultPresence));
+            successors[i].res = (resultPresence*) malloc(sizeof(resultPresence));
             ASSERT_NULL_PTR(successors[i].res, "get_successors()\n")
 
             memcpy(successors[i].res, &(succ[i]), sizeof(resultPresence));
 
-            successors[i].kmer = malloc((bft->k + 1) * sizeof(char));
+            successors[i].kmer = (char*) malloc((bft->k + 1) * sizeof(char));
             ASSERT_NULL_PTR(successors[i].kmer, "get_successors()\n")
 
-            successors[i].kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+            successors[i].kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
             ASSERT_NULL_PTR(successors[i].kmer_comp, "get_successors()\n")
 
             memcpy(successors[i].kmer, &(bft_kmer->kmer[1]), (bft->k - 1) * sizeof(char));
@@ -1018,15 +1018,15 @@ void v_iterate_over_kmers(BFT* bft, BFT_func_ptr f, va_list args){
     int nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
     int lvl_root = (bft->k / NB_CHAR_SUF_PREF) - 1;
 
-    uint8_t* kmer = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+    uint8_t* kmer = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(kmer,"v_iterate_over_kmers()\n")
 
     BFT_kmer* bft_kmer = create_empty_kmer();
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "v_iterate_over_kmers()\n")
 
-    bft_kmer->kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "v_iterate_over_kmers()\n")
 
     bft_kmer->res = create_resultPresence();
@@ -1059,15 +1059,15 @@ void iterate_over_kmers(BFT* bft, BFT_func_ptr f, ... ){
     int nb_bytes_kmer_comp = CEIL(bft->k * 2, SIZE_BITS_UINT_8T);
     int lvl_root = (bft->k / NB_CHAR_SUF_PREF) - 1;
 
-    uint8_t* kmer = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+    uint8_t* kmer = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(kmer,"iterate_over_kmers()\n")
 
     BFT_kmer* bft_kmer = create_empty_kmer();
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "iterate_over_kmers()\n")
 
-    bft_kmer->kmer_comp = calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(nb_bytes_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "iterate_over_kmers()\n")
 
     bft_kmer->res = create_resultPresence();
@@ -1111,18 +1111,18 @@ bool prefix_matching(BFT* bft, char* prefix, BFT_func_ptr f, ...){
 
     size_t return_value;
 
-    uint8_t* prefix_comp = calloc(size_kmer_comp, sizeof(uint8_t));
+    uint8_t* prefix_comp = (uint8_t*) calloc(size_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefix_comp, "prefix_matching()\n")
 
-    uint8_t* shifted_prefix_comp = malloc(size_kmer_comp * sizeof(uint8_t));
+    uint8_t* shifted_prefix_comp = (uint8_t*) malloc(size_kmer_comp * sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_comp, "prefix_matching()\n")
 
     BFT_kmer* bft_kmer = create_empty_kmer();
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "prefix_matching()\n")
 
-    bft_kmer->kmer_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "prefix_matching()\n")
 
     bft_kmer->res = create_resultPresence();
@@ -1164,18 +1164,18 @@ bool prefix_matching_custom(BFT* bft, char* prefix, resultPresence** junction_pr
 
     size_t return_value;
 
-    uint8_t* prefix_comp = calloc(size_kmer_comp, sizeof(uint8_t));
+    uint8_t* prefix_comp = (uint8_t*) calloc(size_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefix_comp, "prefix_matching()\n")
 
-    uint8_t* shifted_prefix_comp = malloc(size_kmer_comp * sizeof(uint8_t));
+    uint8_t* shifted_prefix_comp = (uint8_t*) malloc(size_kmer_comp * sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_comp, "prefix_matching()\n")
 
     BFT_kmer* bft_kmer = create_empty_kmer();
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "prefix_matching()\n")
 
-    bft_kmer->kmer_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "prefix_matching()\n")
 
     bft_kmer->res = create_resultPresence();
@@ -1259,15 +1259,15 @@ uint32_t* query_sequence(BFT* bft, char* sequence, double threshold, bool canoni
 
     uint32_t* colors_set;
 
-    uint32_t* count_colors = calloc(bft->nb_genomes, sizeof(uint32_t));
+    uint32_t* count_colors = (uint32_t*) calloc(bft->nb_genomes, sizeof(uint32_t));
     ASSERT_NULL_PTR(count_colors, "query_sequence()\n");
 
     char* kmer;
 
-    char* kmer_not_rev_comp = malloc((bft->k + 1) * sizeof(char));
+    char* kmer_not_rev_comp = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(kmer_not_rev_comp, "query_sequence()\n");
 
-    char* kmer_rev_comp = malloc((bft->k + 1) * sizeof(char));
+    char* kmer_rev_comp = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(kmer_rev_comp, "query_sequence()\n");
 
     kmer_not_rev_comp[bft->k] = '\0';
@@ -1319,7 +1319,7 @@ uint32_t* query_sequence(BFT* bft, char* sequence, double threshold, bool canoni
         if (nb_kmers_found + nb_kmers_colors_set - it_kmers_query < nb_kmers_query_min) break;
     }
 
-    colors_set = malloc((nb_colors + 1) * sizeof(uint32_t));
+    colors_set = (uint32_t*) malloc((nb_colors + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(colors_set, "query_sequence()\n");
 
     it_colors = 0;
@@ -1340,7 +1340,7 @@ uint32_t* query_sequence(BFT* bft, char* sequence, double threshold, bool canoni
 
     colors_set[0] = it_colors;
 
-    colors_set = realloc(colors_set, (it_colors + 1) * sizeof(uint32_t));
+    colors_set = (uint32_t*) realloc(colors_set, (it_colors + 1) * sizeof(uint32_t));
     ASSERT_NULL_PTR(colors_set, "query_sequence()\n");
 
     free(kmer_not_rev_comp);
@@ -1379,10 +1379,10 @@ BFT* create_cdbg_from_bft_kmers(BFT_kmer** bft_kmers, uint32_t nb_bft_kmers, BFT
 
         //res = create_resultPresence();
 
-        substring = malloc(nb_bytes_kmer * sizeof(uint8_t));
+        substring = (uint8_t*) malloc(nb_bytes_kmer * sizeof(uint8_t));
         ASSERT_NULL_PTR(substring, "create_sub_cdbg()\n");
 
-        substring_tmp = malloc(nb_bytes_kmer * sizeof(uint8_t));
+        substring_tmp = (uint8_t*) malloc(nb_bytes_kmer * sizeof(uint8_t));
         ASSERT_NULL_PTR(substring_tmp, "create_sub_cdbg()\n");
 
         add_genomes_BFT_Root(bft->nb_genomes, bft->filenames, sub_bft);
@@ -1450,7 +1450,7 @@ BFT* create_cdbg_from_bft_kmers(BFT_kmer** bft_kmers, uint32_t nb_bft_kmers, BFT
     }
     else{
 
-        char** kmers = malloc(nb_bft_kmers * sizeof(char*));
+        char** kmers = (char**) malloc(nb_bft_kmers * sizeof(char*));
         ASSERT_NULL_PTR(kmers, "create_sub_cdbg()\n");
 
         for (i = 0; i < nb_bft_kmers; i++) kmers[i] = bft_kmers[i]->kmer;

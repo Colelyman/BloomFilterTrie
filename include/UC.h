@@ -33,7 +33,7 @@ inline int max_size_annot_cplx_sub(uint8_t* annot_cplx, int nb_cplx, int size_cp
 
 inline UC* createUC(){
 
-    UC* uc = calloc(1,sizeof(UC));
+    UC* uc = (UC*) calloc(1,sizeof(UC));
     ASSERT_NULL_PTR(uc,"createUC()")
 
     uc->suffixes = NULL;
@@ -100,7 +100,7 @@ inline UC_SIZE_ANNOT_CPLX_T * min_size_per_annot_cplx(UC* uc, int nb_substrings,
     int pos = 0;
     int size_line = SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes;
 
-    UC_SIZE_ANNOT_CPLX_T *sizes = calloc(nb_substrings, sizeof( UC_SIZE_ANNOT_CPLX_T ));
+    UC_SIZE_ANNOT_CPLX_T *sizes = (UC_SIZE_ANNOT_CPLX_T*) calloc(nb_substrings, sizeof( UC_SIZE_ANNOT_CPLX_T ));
     ASSERT_NULL_PTR(sizes, "min_size_per_annot_cplx()")
 
     uint8_t* annot_cplx = &(uc->suffixes[nb_substrings * (size_substring + uc->size_annot)
@@ -134,7 +134,7 @@ inline UC_SIZE_ANNOT_CPLX_T * min_size_per_annot_cplx_sub(UC* uc, int nb_substri
 
     uint16_t pos = 0;
 
-    UC_SIZE_ANNOT_CPLX_T *sizes = calloc(pos_end - pos_start + 1, sizeof( UC_SIZE_ANNOT_CPLX_T ));
+    UC_SIZE_ANNOT_CPLX_T *sizes = (UC_SIZE_ANNOT_CPLX_T*) calloc(pos_end - pos_start + 1, sizeof( UC_SIZE_ANNOT_CPLX_T ));
     ASSERT_NULL_PTR(sizes, "min_size_per_annot_cplx_sub()")
 
     uint8_t* annot_cplx = &(uc->suffixes[nb_substrings * (size_substring + uc->size_annot)

@@ -124,27 +124,27 @@ inline void free_annotation_array_elem(annotation_array_elem** annot_sorted, int
 
 inline annotation_inform* create_annotation_inform(int nb_id_genomes, bool disable_flag_0){
 
-    annotation_inform* ann_inf = calloc(1, sizeof(annotation_inform));
+    annotation_inform* ann_inf = (annotation_inform*) calloc(1, sizeof(annotation_inform));
     ASSERT_NULL_PTR(ann_inf,"create_annotation_inform()")
 
     if (nb_id_genomes <= 0){
-        ann_inf->id_stored = malloc(NB_MAX_ID_GENOMES * sizeof(uint32_t));
+        ann_inf->id_stored = (uint32_t*) malloc(NB_MAX_ID_GENOMES * sizeof(uint32_t));
         ASSERT_NULL_PTR(ann_inf->id_stored, "create_annotation_inform()");
 
-        ann_inf->size_id_stored = malloc(NB_MAX_ID_GENOMES * sizeof(uint32_t));
+        ann_inf->size_id_stored = (uint32_t*) malloc(NB_MAX_ID_GENOMES * sizeof(uint32_t));
         ASSERT_NULL_PTR(ann_inf->size_id_stored, "create_annotation_inform()");
 
-        ann_inf->annotation = calloc(SIZE_MAX_BYTE_ANNOT, sizeof(uint8_t));
+        ann_inf->annotation = (uint8_t*) calloc(SIZE_MAX_BYTE_ANNOT, sizeof(uint8_t));
         ASSERT_NULL_PTR(ann_inf->annotation, "create_annotation_inform()");
     }
     else{
-        ann_inf->id_stored = malloc(nb_id_genomes * sizeof(uint32_t));
+        ann_inf->id_stored = (uint32_t*) malloc(nb_id_genomes * sizeof(uint32_t));
         ASSERT_NULL_PTR(ann_inf->id_stored, "create_annotation_inform()");
 
-        ann_inf->size_id_stored = malloc(nb_id_genomes * sizeof(uint32_t));
+        ann_inf->size_id_stored = (uint32_t*) malloc(nb_id_genomes * sizeof(uint32_t));
         ASSERT_NULL_PTR(ann_inf->size_id_stored, "create_annotation_inform()");
 
-        ann_inf->annotation = calloc(CEIL(nb_id_genomes + 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+        ann_inf->annotation = (uint8_t*) calloc(CEIL(nb_id_genomes + 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
         ASSERT_NULL_PTR(ann_inf->annotation, "create_annotation_inform()");
     }
 
@@ -261,7 +261,7 @@ inline UC_SIZE_ANNOT_T *min_size_per_sub(uint8_t* annot, int nb_substrings, int 
     if (nb_substrings == 0) return 0;
     else ASSERT_NULL_PTR(annot, "min_size_per_sub()")
 
-    UC_SIZE_ANNOT_T *sizes = calloc(nb_substrings, sizeof( UC_SIZE_ANNOT_T ));
+    UC_SIZE_ANNOT_T *sizes = (UC_SIZE_ANNOT_T*) calloc(nb_substrings, sizeof( UC_SIZE_ANNOT_T ));
     ASSERT_NULL_PTR(sizes, "min_size_per_sub()")
 
     if (size_annot == 0) return sizes;

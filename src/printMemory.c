@@ -10,7 +10,7 @@
 *  ---------------------------------------------------------------------------------------------------------------
 */
 memory_Used* create_memory_Used(){
-    memory_Used* mem = calloc(1,sizeof(memory_Used));
+    memory_Used* mem = (memory_Used*) calloc(1,sizeof(memory_Used));
     ASSERT_NULL_PTR(mem,"create_memory_Used()")
 
     return mem;

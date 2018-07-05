@@ -41,10 +41,10 @@
 
     char** new_filename;
 
-    char** output_filename = malloc(sizeof(char*));
+    char** output_filename = (char**) malloc(sizeof(char*));
     ASSERT_NULL_PTR(output_filename, "merging_BFT() 4\n");
 
-    output_filename[0] = malloc((len_output_filename + 30) * sizeof(char));
+    output_filename[0] = (char*) malloc((len_output_filename + 30) * sizeof(char));
     ASSERT_NULL_PTR(output_filename[0], "merging_BFT() 4\n");
 
     strcpy(output_filename[0], output_prefix);
@@ -55,7 +55,7 @@
         while (IS_EVEN(((CC*)bft1->node.CC_array)[nb_ccs_bft1-1].type));
     }
 
-    files_cc = malloc((nb_ccs_bft1 + 1) * sizeof(FILE*));
+    files_cc = (FILE**) malloc((nb_ccs_bft1 + 1) * sizeof(FILE*));
     ASSERT_NULL_PTR(files_cc, "merging_BFT() 6\n");
 
     for (j = 0; j <= nb_ccs_bft1; j++){
@@ -87,41 +87,41 @@
             {
                 nb_threads = omp_get_num_threads();
 
-                bfts_insert = malloc(nb_threads * sizeof(BFT*));
+                bfts_insert = (BFT**) malloc(nb_threads * sizeof(BFT*));
                 ASSERT_NULL_PTR(bfts_insert, "merging_BFT() 3\n");
 
-                new_filename = malloc(nb_threads * sizeof(char*));
+                new_filename = (char**) malloc(nb_threads * sizeof(char*));
                 ASSERT_NULL_PTR(new_filename, "merging_BFT() 3\n");
 
-                output_filename = malloc(nb_threads * sizeof(char*));
+                output_filename = (char**) malloc(nb_threads * sizeof(char*));
                 ASSERT_NULL_PTR(output_filename, "merging_BFT() 3\n");
 
-                kmer_comp = malloc(nb_threads * sizeof(uint8_t*));
+                kmer_comp = (uint8_t**) malloc(nb_threads * sizeof(uint8_t*));
                 ASSERT_NULL_PTR(kmer_comp, "merging_BFT() 3\n");
 
-                kmer_comp_cpy = malloc(nb_threads * sizeof(uint8_t*));
+                kmer_comp_cpy = (uint8_t**) malloc(nb_threads * sizeof(uint8_t*));
                 ASSERT_NULL_PTR(kmer_comp_cpy, "merging_BFT() 3\n");
 
-                bft_annot = malloc(nb_threads * sizeof(BFT_annotation*));
+                bft_annot = (BFT_annotation**) malloc(nb_threads * sizeof(BFT_annotation*));
                 ASSERT_NULL_PTR(bft_annot, "merging_BFT() 3\n");
 
                 for (i = 0; i < nb_threads; i++){
 
                     bfts_insert[i] = copy_BFT_Root(bft1);
 
-                    kmer_comp[i] = malloc(nb_bytes * sizeof(uint8_t));
+                    kmer_comp[i] = (uint8_t*) malloc(nb_bytes * sizeof(uint8_t));
                     ASSERT_NULL_PTR(kmer_comp[i], "merging_BFT() 1\n");
 
-                    kmer_comp_cpy[i] = malloc(nb_bytes * sizeof(uint8_t));
+                    kmer_comp_cpy[i] = (uint8_t*) malloc(nb_bytes * sizeof(uint8_t));
                     ASSERT_NULL_PTR(kmer_comp_cpy[i], "merging_BFT() 1\n");
 
-                    new_filename[i] = malloc((len_filename_cc + 30) * sizeof(char));
+                    new_filename[i] = (char*) malloc((len_filename_cc + 30) * sizeof(char));
                     ASSERT_NULL_PTR(new_filename[i], "merging_BFT() 3\n");
 
                     strcpy(new_filename[i], prefix_bft1);
                     new_filename[i][len_filename_cc] = '_';
 
-                    output_filename[i] = malloc((len_output_filename + 30) * sizeof(char));
+                    output_filename[i] = (char*) malloc((len_output_filename + 30) * sizeof(char));
                     ASSERT_NULL_PTR(output_filename[i], "merging_BFT() 3\n");
 
                     strcpy(output_filename[i], output_prefix);
@@ -129,7 +129,7 @@
 
                     bft_annot[i] = create_BFT_annotation();
 
-                    bft_annot[i]->annot = calloc(SIZE_MAX_BYTE_ANNOT, sizeof(uint8_t));
+                    bft_annot[i]->annot = (uint8_t*) calloc(SIZE_MAX_BYTE_ANNOT, sizeof(uint8_t));
                     ASSERT_NULL_PTR(bft_annot[i]->annot, "merging_BFT() 5\n");
                 }
             }
