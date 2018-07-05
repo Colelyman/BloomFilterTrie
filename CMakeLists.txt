@@ -43,6 +43,7 @@ install(TARGETS bft_bin bft_static bft_shared DESTINATION ${CMAKE_INSTALL_PREFIX
 set(PROJECT_JUDY_PATH ${CMAKE_BINARY_DIR}/judy-1.0.5)
 ExternalProject_Add(project_judy
   URL https://downloads.sourceforge.net/project/judy/judy/Judy-1.0.5/Judy-1.0.5.tar.gz
+  URL_HASH MD5=115a0d26302676e962ae2f70ec484a54
   PREFIX ${PROJECT_JUDY_PATH}
   CONFIGURE_COMMAND ${PROJECT_JUDY_PATH}/src/project_judy/configure --prefix=${PROJECT_JUDY_PATH}
   BUILD_IN_SOURCE TRUE
@@ -64,6 +65,7 @@ target_link_libraries(bft_shared judy)
 set(PROJECT_JEMALLOC_PATH ${CMAKE_BINARY_DIR}/jemalloc-5.1.0)
 ExternalProject_Add(project_jemalloc
   URL https://github.com/jemalloc/jemalloc/releases/download/5.1.0/jemalloc-5.1.0.tar.bz2
+  URL_HASH MD5=1f47a5aff2d323c317dfa4cf23be1ce4
   PREFIX ${PROJECT_JEMALLOC_PATH}
   CONFIGURE_COMMAND ${PROJECT_JEMALLOC_PATH}/src/project_jemalloc/configure --prefix=${PROJECT_JEMALLOC_PATH}
   BUILD_IN_SOURCE TRUE
