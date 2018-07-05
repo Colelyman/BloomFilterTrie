@@ -81,7 +81,7 @@ sudo make install
 
 Once the library is installed on your system, just use
 ```
-#include <bft/bft.h>
+#include <bft.h>
 ```
 in your C code. Then, use the following flag for linking:
 ```
@@ -95,7 +95,7 @@ the static or shared library.
 Once the library is installed on your system, just use
 ```
 extern "C" {
-	#include <bft/bft.h>
+	#include <bft.h>
 }
 ```
 in your C++ code. Then, use the following flag for linking:
