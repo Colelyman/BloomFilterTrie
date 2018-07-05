@@ -15,9 +15,10 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_library(bft OBJECT "")
 
 # the bft executable
-add_executable(bft_bin $<TARGET_OBJECTS:bft>)
+add_executable(bft_bin $<TARGET_OBJECTS:bft> ${CMAKE_SOURCE_DIR}/src/main.c)
 set_target_properties(bft_bin
   PROPERTIES OUTPUT_NAME bft)
+target_include_directories(bft_bin PRIVATE "${CMAKE_SOURCE_DIR}/include")
 
 # the bft static library
 add_library(bft_static STATIC $<TARGET_OBJECTS:bft>)
@@ -26,7 +27,7 @@ add_library(bft_static STATIC $<TARGET_OBJECTS:bft>)
 add_library(bft_shared SHARED $<TARGET_OBJECTS:bft>)
 
 # Compiler flags
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3 -std=c99 -msse4.1 -mpopcnt -DXXH_NAMESPACE=BFT_HASH_")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fpermissive -O3 -std=c99 -msse4.1 -mpopcnt -DXXH_NAMESPACE=BFT_HASH_")
 
 # Set proper include directory
 target_include_directories(bft PUBLIC "${CMAKE_SOURCE_DIR}/include")

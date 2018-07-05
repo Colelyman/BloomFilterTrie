@@ -13,7 +13,6 @@ set(SOURCES
   "${CMAKE_CURRENT_LIST_DIR}/intersection.c"
   "${CMAKE_CURRENT_LIST_DIR}/list.c"
   "${CMAKE_CURRENT_LIST_DIR}/log2.c"
-  "${CMAKE_CURRENT_LIST_DIR}/main.c"
   "${CMAKE_CURRENT_LIST_DIR}/marking.c"
   "${CMAKE_CURRENT_LIST_DIR}/merge.c"
   "${CMAKE_CURRENT_LIST_DIR}/popcnt.c"
