@@ -102,10 +102,6 @@ in your C++ code. Then, use the following flag for linking:
 ```
 -lbft_(static|shared)
 ```
-and the following flag for compiling:
-```
--fpermissive
-```
 
 ### Non-default installations
 
