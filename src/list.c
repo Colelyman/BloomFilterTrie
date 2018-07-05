@@ -35,7 +35,7 @@ void List_clear_destroy(List *list)
 
 void List_push(List *list, void *value)
 {
-    ListNode *node = calloc(1, sizeof(ListNode));
+    ListNode *node = (ListNode*) calloc(1, sizeof(ListNode));
     ASSERT_NULL_PTR(node, "List_push()\n")
 
     node->value = value;
@@ -130,7 +130,7 @@ ListNode* List_insert(List *list, ListNode *node_after_insert, void* value)
     }
     else {
 
-        ListNode *new_node = calloc(1, sizeof(ListNode));
+        ListNode *new_node = (ListNode*) calloc(1, sizeof(ListNode));
         ASSERT_NULL_PTR(new_node, "List_push()\n")
 
         new_node->value = value;

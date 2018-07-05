@@ -119,10 +119,10 @@ uint16_t** build_skip_nodes(Node* node);
 void free_skip_nodes(Node* node, uint16_t** skp_nodes);
 
 inline CC* createCC(int nb_bits_bf){
-    CC* cc = malloc(sizeof(CC));
+    CC* cc = (CC*) malloc(sizeof(CC));
     ASSERT_NULL_PTR(cc,"createCC()")
 
-    cc->BF_filter2 = calloc((nb_bits_bf/SIZE_BITS_UINT_8T)+(SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    cc->BF_filter2 = (uint8_t*) calloc((nb_bits_bf/SIZE_BITS_UINT_8T)+(SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->BF_filter2,"createCC()")
 
     cc->filter3 = NULL;
@@ -142,7 +142,7 @@ inline CC* createCC(int nb_bits_bf){
 inline void initiateCC(CC* cc, int nb_bits_bf){
     ASSERT_NULL_PTR(cc,"createCC()")
 
-    cc->BF_filter2 = calloc((nb_bits_bf/SIZE_BITS_UINT_8T)+(SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    cc->BF_filter2 = (uint8_t*) calloc((nb_bits_bf/SIZE_BITS_UINT_8T)+(SIZE_FILTER2_DEFAULT/SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->BF_filter2,"createCC()")
 
     cc->filter3 = NULL;
@@ -213,7 +213,7 @@ inline void freeNode(Node* node, int lvl_node, info_per_level*  info_per_lvl){
 
 inline BFT_Root* createBFT_Root(int k, int treshold_compression, uint8_t compressed){
 
-    BFT_Root* root = malloc(sizeof(BFT_Root));
+    BFT_Root* root = (BFT_Root*) malloc(sizeof(BFT_Root));
     ASSERT_NULL_PTR(root,"createBFT_Root()")
 
     initialize_BFT_Root(root, k, treshold_compression, compressed);
@@ -293,7 +293,7 @@ inline BFT_Root* copy_BFT_Root(BFT_Root* root_src){
 
     ASSERT_NULL_PTR(root_src,"copy_BFT_Root()")
 
-    BFT_Root* root_dest = malloc(sizeof(BFT_Root));
+    BFT_Root* root_dest = (BFT_Root*) malloc(sizeof(BFT_Root));
     ASSERT_NULL_PTR(root_dest,"copy_BFT_Root()")
 
     memcpy(root_dest, root_src, sizeof(BFT_Root));
@@ -312,8 +312,8 @@ inline void add_genomes_BFT_Root(int nb_files, char** filenames, BFT_Root* root)
 
         ASSERT_NULL_PTR(filenames, "add_genomes_BFT_Root()\n")
 
-        if (root->filenames == NULL) root->filenames = malloc(nb_files * sizeof(char*));
-        else root->filenames = realloc(root->filenames, (root->nb_genomes + nb_files) * sizeof(char*));
+        if (root->filenames == NULL) root->filenames = (char**) malloc(nb_files * sizeof(char*));
+        else root->filenames = (char**) realloc(root->filenames, (root->nb_genomes + nb_files) * sizeof(char*));
 
         ASSERT_NULL_PTR(root->filenames, "add_genomes_BFT_Root()\n")
 
@@ -321,7 +321,7 @@ inline void add_genomes_BFT_Root(int nb_files, char** filenames, BFT_Root* root)
 
             ASSERT_NULL_PTR(filenames[i], "add_genomes_BFT_Root()\n")
 
-            root->filenames[i + root->nb_genomes] = calloc(strlen(filenames[i]) + 1, sizeof(char));
+            root->filenames[i + root->nb_genomes] = (char*) calloc(strlen(filenames[i]) + 1, sizeof(char));
             ASSERT_NULL_PTR(root->filenames[i + root->nb_genomes] , "add_genomes_BFT_Root()\n")
 
             strcpy(root->filenames[i + root->nb_genomes], filenames[i]);
@@ -340,7 +340,7 @@ inline void allocate_children_type (CC* cc, int nb_elt){
 
     ASSERT_NULL_PTR(cc, "allocate_children_type()")
 
-    cc->children_type = calloc(CEIL(nb_elt,2), sizeof(uint8_t));
+    cc->children_type = (uint8_t*) calloc(CEIL(nb_elt,2), sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->children_type, "allocate_children_type()")
 
     return;
@@ -375,7 +375,7 @@ inline uint8_t addNewElt(CC* cc, int position, int current_nb_elem, uint8_t type
 
             if ((cc->children_type[position/2] >> 4) + 1 == 0x10){
 
-                uint8_t* tmp_children_type = calloc(current_nb_elem, sizeof(uint8_t));
+                uint8_t* tmp_children_type = (uint8_t*) calloc(current_nb_elem, sizeof(uint8_t));
                 ASSERT_NULL_PTR(tmp_children_type, "addNewElt()")
 
                 int i, j;
@@ -398,7 +398,7 @@ inline uint8_t addNewElt(CC* cc, int position, int current_nb_elem, uint8_t type
         else{
             if ((cc->children_type[position/2] & 0xf) + 1 == 0x10){
 
-                uint8_t* tmp_children_type = calloc(current_nb_elem, sizeof(uint8_t));
+                uint8_t* tmp_children_type = (uint8_t*) calloc(current_nb_elem, sizeof(uint8_t));
                 ASSERT_NULL_PTR(tmp_children_type, "addNewElt()")
 
                 int i, j;
@@ -429,7 +429,7 @@ inline void realloc_and_int_children_type(CC* cc, int current_nb_elem, int posit
     ASSERT_NULL_PTR(cc, "realloc_and_int_children_type ()")
 
     if (type == 1){
-        cc->children_type = realloc(cc->children_type, (current_nb_elem+1)*sizeof(uint8_t));
+        cc->children_type = (uint8_t*) realloc(cc->children_type, (current_nb_elem+1)*sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->children_type, "realloc_and_int_children_type ()")
 
         memmove(&(cc->children_type[position_insert+1]),
@@ -441,7 +441,7 @@ inline void realloc_and_int_children_type(CC* cc, int current_nb_elem, int posit
     else{
         if (IS_EVEN(current_nb_elem)){
 
-            cc->children_type = realloc(cc->children_type, (current_nb_elem / 2 + 1) * sizeof(uint8_t));
+            cc->children_type = (uint8_t*) realloc(cc->children_type, (current_nb_elem / 2 + 1) * sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->children_type, "realloc_and_int_children_type ()")
 
             cc->children_type[current_nb_elem / 2] = 0;

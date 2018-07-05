@@ -1227,7 +1227,7 @@ int* get_bf_presence_per_cc(BFT_Root* root){
     int i;
     int size_pres_bf = pow(4, NB_CHAR_SUF_PREF);
 
-    int* presence_bf = malloc(size_pres_bf * sizeof(int));
+    int* presence_bf = (int*) malloc(size_pres_bf * sizeof(int));
     ASSERT_NULL_PTR(presence_bf, "get_bf_presence_per_cc()\n");
 
     info_per_level* info_per_lvl = &(root->info_per_lvl[root->k / NB_CHAR_SUF_PREF - 1]);
@@ -1841,7 +1841,7 @@ resultPresence* isKmerPresent(Node*  node, BFT_Root* root, int lvl_node, uint8_t
     uint8_t kmer_tmp[root->info_per_lvl[lvl_node].size_kmer_in_bytes];
     memcpy(kmer_tmp, kmer, root->info_per_lvl[lvl_node].size_kmer_in_bytes);
 
-    resultPresence* res = malloc(sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"isKmerPresent()")
 
     //We want to start the search at the beginning of the node so 4th argument is 0
@@ -1937,18 +1937,18 @@ bool prefix_matching_comp(BFT* bft, uint8_t* prefix_comp, int length_prefix, BFT
 
     size_t return_value;
 
-    uint8_t* prefix_comp_cpy = calloc(size_kmer_comp, sizeof(uint8_t));
+    uint8_t* prefix_comp_cpy = (uint8_t*) calloc(size_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(prefix_comp_cpy, "prefix_matching()\n")
 
-    uint8_t* shifted_prefix_comp = calloc(size_kmer_comp, sizeof(uint8_t));
+    uint8_t* shifted_prefix_comp = (uint8_t*) calloc(size_kmer_comp, sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_comp, "prefix_matching_comp()\n")
 
     BFT_kmer* bft_kmer = create_empty_kmer();
 
-    bft_kmer->kmer = malloc((bft->k + 1) * sizeof(char));
+    bft_kmer->kmer = (char*) malloc((bft->k + 1) * sizeof(char));
     ASSERT_NULL_PTR(bft_kmer->kmer, "prefix_matching_comp()\n")
 
-    bft_kmer->kmer_comp = calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    bft_kmer->kmer_comp = (uint8_t*) calloc(CEIL(bft->k * 2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(bft_kmer->kmer_comp, "prefix_matching_comp()\n")
 
     bft_kmer->res = create_resultPresence();
@@ -2006,13 +2006,13 @@ bool prefix_matching_comp(BFT* bft, uint8_t* prefix_comp, int length_prefix, BFT
     CC* cc;
     UC* uc;
 
-    resultPresence* res = malloc(sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"prefix_matching()\n")
 
     uint8_t* prefix_comp;
     uint8_t* kmer_comp;
 
-    uint8_t* shifted_prefix_cpy = malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
+    uint8_t* shifted_prefix_cpy = (uint8_t*) malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_cpy, "prefix_matching()\n")
 
     memcpy(shifted_prefix_cpy, shifted_prefix, size_prefix_shifted_bytes * sizeof(uint8_t));
@@ -2118,7 +2118,7 @@ bool prefix_matching_comp(BFT* bft, uint8_t* prefix_comp, int length_prefix, BFT
 
         nb_prefixes_possible = pow(4, NB_CHAR_SUF_PREF - size_prefix_shifted);
 
-        prefix_comp = calloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes, sizeof(uint8_t));
+        prefix_comp = (uint8_t*) calloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes, sizeof(uint8_t));
         ASSERT_NULL_PTR(prefix_comp, "serialize_subpaths_recycling()\n")
 
         if (NB_CHAR_SUF_PREF % 4) prefix_shift = SIZE_BITS_UINT_8T - ((NB_CHAR_SUF_PREF % 4) * 2);
@@ -2145,7 +2145,7 @@ bool prefix_matching_comp(BFT* bft, uint8_t* prefix_comp, int length_prefix, BFT
 
                     if (res->container_is_UC == 0){
 
-                        kmer_comp = calloc(size_kmer_bytes, sizeof(uint8_t));
+                        kmer_comp = (uint8_t*) calloc(size_kmer_bytes, sizeof(uint8_t));
                         ASSERT_NULL_PTR(kmer_comp, "prefix_matching()\n")
 
 
@@ -2278,12 +2278,12 @@ size_t v_prefix_matching(Node* node, BFT_Root* root, int lvl_node,
     CC* cc;
     UC* uc;
 
-    resultPresence* res = malloc(sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"prefix_matching()\n")
 
     uint8_t* kmer_comp;
 
-    uint8_t* shifted_prefix_cpy = malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
+    uint8_t* shifted_prefix_cpy = (uint8_t*) malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_cpy, "prefix_matching()\n")
 
     memcpy(shifted_prefix_cpy, shifted_prefix, size_prefix_shifted_bytes * sizeof(uint8_t));
@@ -2382,7 +2382,7 @@ size_t v_prefix_matching(Node* node, BFT_Root* root, int lvl_node,
     }
     else{
 
-        kmer_comp = calloc(size_kmer_bytes, sizeof(uint8_t));
+        kmer_comp = (uint8_t*) calloc(size_kmer_bytes, sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp, "prefix_matching()\n")
 
         length_rounded_prefix = root->k - (lvl_node + 1) * NB_CHAR_SUF_PREF;
@@ -2482,10 +2482,10 @@ size_t v_prefix_matching_custom(Node* node, BFT_Root* root, int lvl_node,
     uint8_t* kmer_comp;
     uint8_t* shifted_prefix_cpy;
 
-    resultPresence* res = malloc(sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"prefix_matching()\n")
 
-    shifted_prefix_cpy = malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
+    shifted_prefix_cpy = (uint8_t*) malloc(root->info_per_lvl[lvl_node].size_kmer_in_bytes * sizeof(uint8_t));
     ASSERT_NULL_PTR(shifted_prefix_cpy, "prefix_matching()\n")
 
     memcpy(shifted_prefix_cpy, shifted_prefix, size_prefix_shifted_bytes * sizeof(uint8_t));
@@ -2610,7 +2610,7 @@ size_t v_prefix_matching_custom(Node* node, BFT_Root* root, int lvl_node,
     }
     else{
 
-        kmer_comp = calloc(size_kmer_bytes, sizeof(uint8_t));
+        kmer_comp = (uint8_t*) calloc(size_kmer_bytes, sizeof(uint8_t));
         ASSERT_NULL_PTR(kmer_comp, "prefix_matching()\n")
 
         length_rounded_prefix = root->k - (lvl_node + 1) * NB_CHAR_SUF_PREF;

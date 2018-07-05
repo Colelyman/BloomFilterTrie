@@ -160,7 +160,7 @@ inline uint64_t* create_hash_v_array(int rand_seed1, int rand_seed2){
     int j, nb_bits;
     uint32_t nb_hash_v = pow(4, NB_CHAR_SUF_PREF);
 
-    uint64_t* hash_v = malloc(nb_hash_v * 2 * sizeof(uint64_t));
+    uint64_t* hash_v = (uint64_t*) malloc(nb_hash_v * 2 * sizeof(uint64_t));
     ASSERT_NULL_PTR(hash_v, "create_hash_v_array()")
 
     uint8_t gen_sub[SIZE_BYTES_SUF_PREF];
@@ -192,7 +192,7 @@ inline uint64_t* create_hash_v_array(int rand_seed1, int rand_seed2){
 *  ---------------------------------------------------------------------------------------------------------------
 */
 inline Node* createNode(void){
-    Node* node = malloc(sizeof(Node));
+    Node* node = (Node*) malloc(sizeof(Node));
     ASSERT_NULL_PTR(node,"createNode()")
 
     node->CC_array = NULL;
@@ -221,7 +221,7 @@ inline void initiateNode(Node* node){
 
 inline resultPresence* create_resultPresence(){
 
-    resultPresence* res = calloc(1,sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) calloc(1,sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"create_resultPresence()")
 
     res->node = NULL;

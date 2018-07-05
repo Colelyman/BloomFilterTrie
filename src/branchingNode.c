@@ -34,8 +34,8 @@ int isBranchingRight(Node*  node, BFT_Root* root, int lvl_node, uint8_t*  kmer, 
 
     __builtin_prefetch (info_per_lvl, 0, 0);
 
-    resultPresence* res = malloc(4*sizeof(resultPresence));
-    uint8_t* right_shifting = calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
+    resultPresence* res = (resultPresence*) malloc(4*sizeof(resultPresence));
+    uint8_t* right_shifting = (uint8_t*) calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
 
     ASSERT_NULL_PTR(res,"isBranchingRight()")
     ASSERT_NULL_PTR(right_shifting,"isBranchingRight()")
@@ -137,8 +137,8 @@ resultPresence* getRightNeighbors(Node*  node, BFT_Root* root, int lvl_node, uin
 
     __builtin_prefetch (info_per_lvl, 0, 0);
 
-    resultPresence* res = malloc(4 * sizeof(resultPresence));
-    uint8_t* right_shifting = calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
+    resultPresence* res = (resultPresence*) malloc(4 * sizeof(resultPresence));
+    uint8_t* right_shifting = (uint8_t*) calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
 
     ASSERT_NULL_PTR(res,"getRightNeighbors()")
     ASSERT_NULL_PTR(right_shifting,"getRightNeighbors()")
@@ -257,10 +257,10 @@ int isBranchingLeft(Node*  node, BFT_Root* root, int lvl_node, uint8_t*  kmer, i
 
     __builtin_prefetch (info_per_lvl, 0, 0);
 
-    resultPresence* res = malloc(4*sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(4*sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"isBranchingLeft()")
 
-    uint8_t* left_shifting = calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
+    uint8_t* left_shifting = (uint8_t*) calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
     ASSERT_NULL_PTR(left_shifting,"isBranchingLeft()")
 
     if (info_per_lvl->root == 1){
@@ -443,12 +443,12 @@ resultPresence* getLeftNeighbors(Node*  node, BFT_Root* root, int lvl_node, uint
     uint16_t nb_elt;
 
     resultPresence* res_tmp = NULL;
-    resultPresence* res = malloc(4*sizeof(resultPresence));
+    resultPresence* res = (resultPresence*) malloc(4*sizeof(resultPresence));
     ASSERT_NULL_PTR(res,"getLeftNeighbors()")
 
     __builtin_prefetch (info_per_lvl, 0, 0);
 
-    uint8_t* left_shifting = calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
+    uint8_t* left_shifting = (uint8_t*) calloc(info_per_lvl->size_kmer_in_bytes, sizeof(uint8_t));
     ASSERT_NULL_PTR(left_shifting,"getLeftNeighbors()")
 
     if (info_per_lvl->root == 1){
@@ -470,7 +470,7 @@ resultPresence* getLeftNeighbors(Node*  node, BFT_Root* root, int lvl_node, uint
     if (size_kmer == NB_CHAR_SUF_PREF){
         for (i=0; i < 4; i++){
             if (res[i].link_child != NULL){
-                res_tmp = malloc(sizeof(resultPresence));
+                res_tmp = (resultPresence*) malloc(sizeof(resultPresence));
                 memcpy(res_tmp, &(res[i]), sizeof(resultPresence));
                 break;
             }

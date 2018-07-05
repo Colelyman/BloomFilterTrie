@@ -111,7 +111,7 @@ void load_annotation_from_UC(UC* uc, int size_substring, int nb_children, int lo
         uint8_t* annot_tmp;
         uint8_t* annot_start;
 
-        uint8_t* annot = calloc(longest_annot + CEIL(longest_annot, bits_per_byte_checksum) + 4, sizeof(uint8_t));
+        uint8_t* annot = (uint8_t*) calloc(longest_annot + CEIL(longest_annot, bits_per_byte_checksum) + 4, sizeof(uint8_t));
         ASSERT_NULL_PTR(annot, "load_annotation_from_UC()")
 
         uint8_t** extended_annots = get_extend_annots(uc, size_substring, nb_children, 0, nb_children-1);
@@ -190,7 +190,7 @@ void load_annotation_from_UC(UC* uc, int size_substring, int nb_children, int lo
                 else *PValue += size_decomp << 32;
             #else
                 if (*PValue == NULL){
-                    *PValue = malloc(sizeof(uint64_t));
+                    *PValue = (uint64_t*) malloc(sizeof(uint64_t));
                     ASSERT_NULL_PTR(*PValue, "load_annotation_from_UC()")
 
                     **((uint64_t**)PValue) = (size_decomp << 32) | size_decomp;
@@ -247,7 +247,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children,
 
         uint32_t id = 0;
 
-        uint32_t* positions = calloc(nb_children, sizeof(uint32_t));
+        uint32_t* positions = (uint32_t*) calloc(nb_children, sizeof(uint32_t));
         ASSERT_NULL_PTR(positions,"compress_annotation_from_UC() 4")
 
         if (extended_annots != NULL) max_size_annot = uc->size_annot + 1;
@@ -291,7 +291,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children,
 
         size_line_annot = max_size_annot + CEIL(max_size_annot, bits_per_byte_checksum) + 4;
 
-        annotations = calloc(nb_children * size_line_annot, sizeof(uint8_t));
+        annotations = (uint8_t*) calloc(nb_children * size_line_annot, sizeof(uint8_t));
         ASSERT_NULL_PTR(annotations,"compress_annotation_from_UC() 3")
 
         for (z = 0; z < nb_children; z++){
@@ -359,7 +359,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children,
 
         new_size_line = size_substring + size_max;
 
-        new_tab_sub = calloc(nb_children * new_size_line, sizeof(uint8_t));
+        new_tab_sub = (uint8_t*) calloc(nb_children * new_size_line, sizeof(uint8_t));
         ASSERT_NULL_PTR(new_tab_sub,"compress_annotation_from_UC() 2")
 
         for (z = 0; z < nb_children; z++){
@@ -569,7 +569,7 @@ void load_annotation_from_UC(UC* uc, int size_substring, int nb_children, int lo
 
         UC_SIZE_ANNOT_T *min_sizes = min_size_per_sub(uc->suffixes, nb_children, size_substring, uc->size_annot);
 
-        uint8_t* annot = calloc(longest_annot + CEIL(longest_annot, bits_per_byte_checksum) + 4, sizeof(uint8_t));
+        uint8_t* annot = (uint8_t*) calloc(longest_annot + CEIL(longest_annot, bits_per_byte_checksum) + 4, sizeof(uint8_t));
         ASSERT_NULL_PTR(annot, "load_annotation_from_UC()")
 
         for (i=0; i<nb_children; i++){
@@ -651,7 +651,7 @@ void load_annotation_from_UC(UC* uc, int size_substring, int nb_children, int lo
                 else *PValue += size_decomp << 32;
             #else
                 if (*PValue == NULL){
-                    *PValue = malloc(sizeof(uint64_t));
+                    *PValue = (uint64_t*) malloc(sizeof(uint64_t));
                     ASSERT_NULL_PTR(*PValue, "load_annotation_from_UC()")
 
                     **((uint64_t**)PValue) = (size_decomp << 32) | size_decomp;
@@ -781,7 +781,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children, Pvo
         int size_max_annot_cmp = 0;
         int longest_annot = 0;
 
-        uint32_t* positions = calloc(nb_children, sizeof(uint32_t));
+        uint32_t* positions = (uint32_t*) calloc(nb_children, sizeof(uint32_t));
         ASSERT_NULL_PTR(positions,"compress_annotation_from_UC() 4")
 
         if (extended_annots != NULL) max_size_annot = uc->size_annot + 1;
@@ -818,7 +818,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children, Pvo
 
         size_line_annot = max_size_annot + CEIL(max_size_annot, bits_per_byte_checksum) + 4;
 
-        annotations = calloc(nb_children * size_line_annot, sizeof(uint8_t));
+        annotations = (uint8_t*) calloc(nb_children * size_line_annot, sizeof(uint8_t));
         ASSERT_NULL_PTR(annotations,"compress_annotation_from_UC() 3")
 
         for (z=0; z<nb_children; z++){
@@ -905,7 +905,7 @@ int compress_annotation_from_UC(UC* uc, int size_substring, int nb_children, Pvo
         new_size_line = size_substring + size_max;
         uc->size_annot = size_max;
 
-        new_tab_sub = calloc(nb_children * new_size_line, sizeof(uint8_t));
+        new_tab_sub = (uint8_t*) calloc(nb_children * new_size_line, sizeof(uint8_t));
         ASSERT_NULL_PTR(new_tab_sub,"compress_annotation_from_UC() 2")
 
         for (z = 0; z < nb_children; z++){

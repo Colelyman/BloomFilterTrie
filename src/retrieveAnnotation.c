@@ -37,7 +37,7 @@
 
             if (annot_present != 0){
 
-                annot_res = malloc(MAX(size_annot+1, size_annot_cplx)*sizeof(uint8_t));
+                annot_res = (uint8_t*) malloc(MAX(size_annot+1, size_annot_cplx)*sizeof(uint8_t));
                 ASSERT_NULL_PTR(annot_res,"retrieve_annotation_right()")
 
                 if (size_annot != 0) memcpy(annot_res, annot, size_annot * sizeof(uint8_t));
@@ -58,7 +58,7 @@
                     continue;
                 }
                 else{
-                    ann_arr_elem = malloc(sizeof(annotation_array_elem));
+                    ann_arr_elem = (annotation_array_elem*) malloc(sizeof(annotation_array_elem));
                     ASSERT_NULL_PTR(ann_arr_elem,"retrieve_annotation_right()")
 
                     ann_arr_elem->annot_array = annot_res;
@@ -70,7 +70,7 @@
                 }
             }
             else{
-                kmer = malloc(size_kmer_array * sizeof(uint8_t));
+                kmer = (uint8_t*) malloc(size_kmer_array * sizeof(uint8_t));
                 ASSERT_NULL_PTR(kmer,"retrieve_annotation_right()")
 
                 memcpy(kmer, kmer_start, size_kmer_array*sizeof(uint8_t));
@@ -130,7 +130,7 @@ annotation_array_elem* retrieve_annotation_left(Node* root, uint8_t* kmer_start,
 
             if (annot_present != 0){
 
-                annot_res = malloc(MAX(size_annot+1, size_annot_cplx)*sizeof(uint8_t));
+                annot_res = (uint8_t*) malloc(MAX(size_annot+1, size_annot_cplx)*sizeof(uint8_t));
                 ASSERT_NULL_PTR(annot_res,"retrieve_annotation_left()")
 
                 if (size_annot != 0) memcpy(annot_res, annot, size_annot * sizeof(uint8_t));
@@ -151,7 +151,7 @@ annotation_array_elem* retrieve_annotation_left(Node* root, uint8_t* kmer_start,
                     continue;
                 }
                 else{
-                    ann_arr_elem = malloc(sizeof(annotation_array_elem));
+                    ann_arr_elem = (annotation_array_elem*) malloc(sizeof(annotation_array_elem));
                     ASSERT_NULL_PTR(ann_arr_elem,"retrieve_annotation_right()")
 
                     ann_arr_elem->annot_array = annot_res;
@@ -163,7 +163,7 @@ annotation_array_elem* retrieve_annotation_left(Node* root, uint8_t* kmer_start,
                 }
             }
             else{
-                kmer = malloc(size_kmer_array * sizeof(uint8_t));
+                kmer = (uint8_t*) malloc(size_kmer_array * sizeof(uint8_t));
                 ASSERT_NULL_PTR(kmer,"retrieve_annotation_left()")
 
                 memcpy(kmer, kmer_start, size_kmer_array*sizeof(uint8_t));
@@ -184,7 +184,7 @@ annotation_array_elem* retrieve_annotation_left(Node* root, uint8_t* kmer_start,
 
     free(res);
 
-    ann_arr_elem = malloc(sizeof(annotation_array_elem));
+    ann_arr_elem = (annotation_array_elem*) malloc(sizeof(annotation_array_elem));
     ASSERT_NULL_PTR(ann_arr_elem,"retrieve_annotation_right()")
 
     ann_arr_elem->annot_array = NULL;

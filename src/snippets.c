@@ -149,7 +149,7 @@ size_t extract_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
             //Initiate the ASCII simple path with the extension seed
             l_simple_path = graph->k;
 
-            char* simple_path = malloc(l_simple_path * sizeof(char));
+            char* simple_path = (char*) malloc(l_simple_path * sizeof(char));
             ASSERT_NULL_PTR(simple_path, "extract_simple_paths()\n");
 
             memcpy(simple_path, kmer->kmer, l_simple_path * sizeof(char));
@@ -186,7 +186,7 @@ size_t extract_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
                         l_simple_path++; //Increase length of the current simple path
 
                         //Reallocate the simple path to match new length
-                        simple_path = realloc(simple_path, l_simple_path * sizeof(char));
+                        simple_path = (char*) realloc(simple_path, l_simple_path * sizeof(char));
                         ASSERT_NULL_PTR(simple_path, "extract_simple_paths()\n");
 
                         //Copy last character of the current successor to the end of the simple path
@@ -250,7 +250,7 @@ size_t extract_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
                         l_simple_path++; //Increase length of the current simple path
 
                         //Reallocate the simple path to match new length
-                        simple_path = realloc(simple_path, l_simple_path * sizeof(char));
+                        simple_path = (char*) realloc(simple_path, l_simple_path * sizeof(char));
                         ASSERT_NULL_PTR(simple_path, "extract_simple_paths()\n");
 
                         //Shift the current path of one character on the right
@@ -279,7 +279,7 @@ size_t extract_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
             }
 
             //Prepare the simple path for file writing
-            simple_path = realloc(simple_path, (l_simple_path+1) * sizeof(char));
+            simple_path = (char*) realloc(simple_path, (l_simple_path+1) * sizeof(char));
             ASSERT_NULL_PTR(simple_path, "extract_simple_paths()\n");
 
             simple_path[l_simple_path] = '\n';
@@ -390,7 +390,7 @@ size_t extract_core_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
 
             l_simple_path = graph->k;
 
-            char* simple_path = malloc(l_simple_path * sizeof(char));
+            char* simple_path = (char*) malloc(l_simple_path * sizeof(char));
             ASSERT_NULL_PTR(simple_path, "extract_core_simple_paths()\n");
 
             memcpy(simple_path, kmer->kmer, l_simple_path * sizeof(char));
@@ -435,7 +435,7 @@ size_t extract_core_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
 
                         l_simple_path++;
 
-                        simple_path = realloc(simple_path, l_simple_path * sizeof(char));
+                        simple_path = (char*) realloc(simple_path, l_simple_path * sizeof(char));
                         ASSERT_NULL_PTR(simple_path, "extract_core_simple_paths()\n");
 
                         simple_path[l_simple_path - 1] = succ[i].kmer[graph->k - 1];
@@ -513,7 +513,7 @@ size_t extract_core_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
 
                         l_simple_path++;
 
-                        simple_path = realloc(simple_path, l_simple_path * sizeof(char));
+                        simple_path = (char*) realloc(simple_path, l_simple_path * sizeof(char));
                         ASSERT_NULL_PTR(simple_path, "extract_core_simple_paths()\n");
 
                         memmove(&simple_path[1], simple_path, (l_simple_path - 1) * sizeof(char));
@@ -540,7 +540,7 @@ size_t extract_core_simple_paths(BFT_kmer* kmer, BFT* graph, va_list args){
                 }
             }
 
-            simple_path = realloc(simple_path, (l_simple_path+1) * sizeof(char));
+            simple_path = (char*) realloc(simple_path, (l_simple_path+1) * sizeof(char));
             ASSERT_NULL_PTR(simple_path, "extract_core_simple_paths()\n");
 
             simple_path[l_simple_path] = '\n';

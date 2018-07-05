@@ -207,7 +207,7 @@ void insertKmer_Node(Node*  node, BFT_Root*  root, int lvl_node, uint8_t*  suffi
         }
         else node_nb_elem = 0;
 
-        node->CC_array = realloc(node->CC_array, (node_nb_elem+1)*sizeof(CC));
+        node->CC_array = (CC*) realloc(node->CC_array, (node_nb_elem+1)*sizeof(CC));
         ASSERT_NULL_PTR(node->CC_array,"insertKmer_Node()")
 
         CC* cc = &(((CC*)node->CC_array)[node_nb_elem]);
@@ -299,8 +299,8 @@ Node* insertKmer_Node_special(BFT_Root*  root, int lvl_cont, uint8_t*  suffix, i
             else count_Node_after_posFilter3 = cc->nb_Node_children - count_nodes(cc, 0, pres->posFilter3+1, type);
 
             //Allocate memory for a new node in CC->children_Node_container
-            if (cc->nb_Node_children == 0) cc->children_Node_container = malloc(sizeof(Node));
-            else cc->children_Node_container = realloc(cc->children_Node_container, (cc->nb_Node_children+1)*sizeof(Node));
+            if (cc->nb_Node_children == 0) cc->children_Node_container = (Node*) malloc(sizeof(Node));
+            else cc->children_Node_container = (Node*) realloc(cc->children_Node_container, (cc->nb_Node_children+1)*sizeof(Node));
 
             ASSERT_NULL_PTR(cc->children_Node_container,"insertKmer_Node_special()")
 
@@ -376,7 +376,7 @@ Node* insertKmer_Node_special(BFT_Root*  root, int lvl_cont, uint8_t*  suffix, i
                 z = uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                     + uc->nb_cplx_nodes * (uc->size_annot_cplx_nodes + SIZE_BYTE_CPLX_N);
 
-                uc->suffixes = realloc(uc->suffixes, ((uc->nb_children+1) * size_line + z) * sizeof(uint8_t));
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((uc->nb_children+1) * size_line + z) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "insertKmer_Node_special()")
 
                 memmove(&(uc->suffixes[pos_sub_size_line+size_line]),

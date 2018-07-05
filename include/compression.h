@@ -73,7 +73,7 @@ typedef struct{
 
 inline Read_count* create_Read_count(){
 
-    Read_count* read_count = calloc(1, sizeof(Read_count));
+    Read_count* read_count = (Read_count*) calloc(1, sizeof(Read_count));
     ASSERT_NULL_PTR(read_count, "create_Read_count()\n");
 
     read_count->id_occ = NULL;
@@ -85,7 +85,7 @@ inline Read_count* create_Read_count(){
 
 inline Pos_length_occ* create_pos_length_occ(){
 
-    Pos_length_occ* pos_length_occ = calloc(1, sizeof(Pos_length_occ));
+    Pos_length_occ* pos_length_occ = (Pos_length_occ*) calloc(1, sizeof(Pos_length_occ));
     ASSERT_NULL_PTR(pos_length_occ, "create_Read_count()\n");
 
     pos_length_occ->id_occ = NULL;
@@ -113,7 +113,7 @@ inline void set_Pos_length_occ(Pos_length_occ* pos_length_occ, int pos, int leng
 inline Pos_length_occ* create_set_Pos_length_occ(int pos, int length, int occ_count, int rev, int nb_mismatches,
                                                  int64_t* id_occ, Mismatch* list_mismatches){
 
-    Pos_length_occ* pos_length_occ = malloc(sizeof(Pos_length_occ));
+    Pos_length_occ* pos_length_occ = (Pos_length_occ*) malloc(sizeof(Pos_length_occ));
     ASSERT_NULL_PTR(pos_length_occ, "binning_reads()\n")
 
     pos_length_occ->position = pos;
@@ -129,7 +129,7 @@ inline Pos_length_occ* create_set_Pos_length_occ(int pos, int length, int occ_co
 
 inline Pos_length_occ* create_set_Pos_length_occ_from_Read_count(int pos, int length, int rev, const Read_count* read_count){
 
-    Pos_length_occ* pos_length_occ = malloc(sizeof(Pos_length_occ));
+    Pos_length_occ* pos_length_occ = (Pos_length_occ*) malloc(sizeof(Pos_length_occ));
     ASSERT_NULL_PTR(pos_length_occ, "binning_reads()\n")
 
     pos_length_occ->position = pos;

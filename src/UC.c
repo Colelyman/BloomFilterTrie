@@ -27,7 +27,7 @@ void insertKmer_UC(UC* uc, uint8_t*  kmer, uint32_t id_genome, int size_id_genom
 
     if (nb_elem == 0){
 
-        uc->suffixes = calloc(nb_cell + ann_inf->min_size, sizeof(uint8_t));
+        uc->suffixes = (uint8_t*) calloc(nb_cell + ann_inf->min_size, sizeof(uint8_t));
         ASSERT_NULL_PTR(uc->suffixes, "insertKmer_UC()")
 
         uc->nb_children = 0x2 | beginning_cluster;
@@ -50,7 +50,7 @@ void insertKmer_UC(UC* uc, uint8_t*  kmer, uint32_t id_genome, int size_id_genom
             beginning_cluster = uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                 + uc->nb_cplx_nodes * (uc->size_annot_cplx_nodes + SIZE_BYTE_CPLX_N);
 
-            uc->suffixes = realloc(uc->suffixes,
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes,
                                    ((nb_elem+1) * size_line + beginning_cluster) * sizeof(uint8_t));
 
             memmove(&(uc->suffixes[(pos_insertion+1) * size_line]), &(uc->suffixes[pos_insertion * size_line]),
@@ -260,13 +260,13 @@ void get_annots(UC* uc, uint8_t*** annots, uint8_t*** annots_ext, uint8_t*** ann
     int i = 0;
     int nb_suffixes = position_end - position_start + 1;
 
-    *annots = malloc(nb_suffixes * sizeof(uint8_t*));
+    *annots = (uint8_t**) malloc(nb_suffixes * sizeof(uint8_t*));
     ASSERT_NULL_PTR(*annots, "get_annots()")
 
-    *size_annots_cplx = calloc(nb_suffixes, sizeof(int));
+    *size_annots_cplx = (int*) calloc(nb_suffixes, sizeof(int));
     ASSERT_NULL_PTR(*size_annots_cplx, "get_annots()")
 
-    *size_annots = calloc(nb_suffixes, sizeof(int));
+    *size_annots = (int*) calloc(nb_suffixes, sizeof(int));
     ASSERT_NULL_PTR(*size_annots, "get_annots()")
 
     *annots_ext = NULL;
@@ -485,13 +485,13 @@ void delete_extend_annots(UC* uc, int size_substring, int nb_substring, int pos_
                 ((nb_substring - pos_sub_end  - 1) * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + tot) * sizeof(uint8_t));
 
         if (realloc_table == 1){
-            uc->suffixes = realloc(uc->suffixes, ((nb_substring - (pos_sub_end - pos_sub_start + 1)) * size_line +
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_substring - (pos_sub_end - pos_sub_start + 1)) * size_line +
                                     uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + tot) * sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes,"delete_extend_annots()")
         }
     }
     else if (realloc_table == 1){
-        uc->suffixes = realloc(uc->suffixes, (nb_substring * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + tot) * sizeof(uint8_t));
+        uc->suffixes = (uint8_t*) realloc(uc->suffixes, (nb_substring * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + tot) * sizeof(uint8_t));
         ASSERT_NULL_PTR(uc->suffixes,"delete_extend_annots()")
     }
 
@@ -529,7 +529,7 @@ uint8_t** get_extend_annots(UC* uc, int size_substring, int nb_substring, int po
     uint8_t** ptr_extend_annot = NULL;
 
     if (uc->nb_extended_annot != 0){
-        ptr_extend_annot = malloc(count_sub*sizeof(uint8_t*));
+        ptr_extend_annot = (uint8_t**) malloc(count_sub*sizeof(uint8_t*));
         ASSERT_NULL_PTR(ptr_extend_annot,"get_extend_annots()")
 
         for (i = 0; i < count_sub; i++) ptr_extend_annot[i] = NULL;
@@ -575,7 +575,7 @@ void recopy_back_annot_extend(UC* uc, int size_substring, int nb_substring){
 
     uint8_t* new_suffixes;
 
-    new_suffixes = calloc(nb_substring * new_size_line + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes), sizeof(uint8_t));
+    new_suffixes = (uint8_t*) calloc(nb_substring * new_size_line + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes), sizeof(uint8_t));
     ASSERT_NULL_PTR(new_suffixes,"recopy_back_annot_extend()")
 
     for (i = 0, j = 0; i < nb_substring * new_size_line; i += new_size_line, j += old_size_line)
@@ -634,7 +634,7 @@ void create_annot_extended(UC* uc, int size_substring, int nb_substring){
     new_size_line = size_substring + uc->size_annot - 1;
     tot_new_size_line = nb_substring * new_size_line;
 
-    new_tab_suffixes = calloc(tot_new_size_line + nb_possible_annot_extend * SIZE_BYTE_EXT_ANNOT
+    new_tab_suffixes = (uint8_t*) calloc(tot_new_size_line + nb_possible_annot_extend * SIZE_BYTE_EXT_ANNOT
                               + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes), sizeof(uint8_t));
     ASSERT_NULL_PTR(new_tab_suffixes,"create_annot_extended()")
 
@@ -696,7 +696,7 @@ uint8_t* realloc_annotation(UC* uc, int size_substring, int nb_substring, int ne
 
         if (new_insertion == 1) new_size_line--;
 
-        new_tab_suffixes = calloc(((nb_substring + new_insertion) * new_size_line + new_insertion * SIZE_BYTE_EXT_ANNOT + tot_size_line_cplx), sizeof(uint8_t));
+        new_tab_suffixes = (uint8_t*) calloc(((nb_substring + new_insertion) * new_size_line + new_insertion * SIZE_BYTE_EXT_ANNOT + tot_size_line_cplx), sizeof(uint8_t));
         ASSERT_NULL_PTR(new_tab_suffixes,"realloc_annotation()")
 
         tot_size_line = nb_substring * old_size_line;
@@ -743,7 +743,7 @@ uint8_t* realloc_annotation(UC* uc, int size_substring, int nb_substring, int ne
             return realloc_annotation(uc, size_substring, nb_substring, new_size_annotation, new_insertion, pos_insert_extend);
         }
 
-        uc->suffixes = realloc(uc->suffixes, ((nb_substring + new_insertion) * old_size_line + (uc->nb_extended_annot+1) * SIZE_BYTE_EXT_ANNOT
+        uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_substring + new_insertion) * old_size_line + (uc->nb_extended_annot+1) * SIZE_BYTE_EXT_ANNOT
                                 + tot_size_line_cplx) * sizeof(uint8_t));
         ASSERT_NULL_PTR(uc->suffixes,"realloc_annotation()")
 
@@ -831,7 +831,7 @@ uint8_t* realloc_annotation(UC* uc, int size_substring, int nb_substring, int ne
 
         if (new_insertion == 1){
 
-            uc->suffixes = realloc(uc->suffixes, ((nb_substring + 1) * old_size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((nb_substring + 1) * old_size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                     + tot_size_line_cplx) * sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes,"realloc_annotation()")
 
@@ -844,7 +844,7 @@ uint8_t* realloc_annotation(UC* uc, int size_substring, int nb_substring, int ne
     }
     else{
 
-        new_tab_suffixes = calloc(((nb_substring + new_insertion) * new_size_line + tot_size_line_cplx), sizeof(uint8_t));
+        new_tab_suffixes = (uint8_t*) calloc(((nb_substring + new_insertion) * new_size_line + tot_size_line_cplx), sizeof(uint8_t));
         ASSERT_NULL_PTR(new_tab_suffixes,"realloc_annotation()")
 
         if (new_insertion == 1){
@@ -1057,7 +1057,7 @@ void delete_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring, int p
                  uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
 
         if (realloc_table == 1){
-            uc->suffixes = realloc(uc->suffixes,
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes,
                                    ((nb_substring - (pos_sub_end - pos_sub_start + 1)) * size_line +
                                     uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
 
@@ -1065,7 +1065,7 @@ void delete_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring, int p
         }
     }
     else if (realloc_table == 1){
-        uc->suffixes = realloc(uc->suffixes, (nb_substring * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT +
+        uc->suffixes = (uint8_t*) realloc(uc->suffixes, (nb_substring * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT +
                                               uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
 
         ASSERT_NULL_PTR(uc->suffixes,"delete_annot_cplx_nodes()")
@@ -1104,7 +1104,7 @@ uint8_t** get_annots_cplx_nodes(UC* uc, int size_substring, int nb_substring, in
     uint8_t** ptr_extend_annot = NULL;
 
     if (uc->nb_cplx_nodes != 0){
-        ptr_extend_annot = malloc(count_sub*sizeof(uint8_t*));
+        ptr_extend_annot = (uint8_t**) malloc(count_sub*sizeof(uint8_t*));
         ASSERT_NULL_PTR(ptr_extend_annot,"get_annots_cplx_nodes()")
 
         for (i=0; i<count_sub; i++) ptr_extend_annot[i] = NULL;
@@ -1147,7 +1147,7 @@ void recopy_back_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring){
     int new_size_line = old_size_line + uc->size_annot_cplx_nodes;
     int tot_size_line = nb_substring * old_size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT;
 
-    uint8_t* new_suffixes = calloc(nb_substring * new_size_line,sizeof(uint8_t));
+    uint8_t* new_suffixes = (uint8_t*) calloc(nb_substring * new_size_line,sizeof(uint8_t));
     ASSERT_NULL_PTR(new_suffixes,"recopy_back_annot_cplx_nodes()")
 
     for (i=0; i<nb_substring; i++)
@@ -1195,7 +1195,7 @@ void increase_size_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring
     uint8_t* cplx_n;
 
     if (to_realloc == 1){
-        uc->suffixes = realloc(uc->suffixes, (tot_size_line + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
+        uc->suffixes = (uint8_t*) realloc(uc->suffixes, (tot_size_line + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
         ASSERT_NULL_PTR(uc->suffixes, "increase_size_annot_cplx_nodes()")
     }
 
@@ -1237,7 +1237,7 @@ void decrease_size_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring
         memset(&(cplx_n[i*size_line_cplx_n]), 0, size_line_cplx_n * sizeof(uint8_t));
     }
 
-    uc->suffixes = realloc(uc->suffixes, (tot_size_line + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
+    uc->suffixes = (uint8_t*) realloc(uc->suffixes, (tot_size_line + uc->nb_cplx_nodes * size_line_cplx_n) * sizeof(uint8_t));
     ASSERT_NULL_PTR(uc->suffixes, "decrease_size_annot_cplx_nodes()")
 
     uc->size_annot_cplx_nodes = new_size;
@@ -1289,7 +1289,7 @@ void create_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring){
     tot_new_size_line = nb_substring * size_substring;
     size_line_cplx_n = max_size_annot + SIZE_BYTE_CPLX_N;
 
-    new_tab_suffixes = calloc(tot_new_size_line + nb_possible_cplx_n * size_line_cplx_n, sizeof(uint8_t));
+    new_tab_suffixes = (uint8_t*) calloc(tot_new_size_line + nb_possible_cplx_n * size_line_cplx_n, sizeof(uint8_t));
     ASSERT_NULL_PTR(new_tab_suffixes,"create_annot_cplx_nodes()")
 
     extend_annot = &(new_tab_suffixes[tot_new_size_line]);
@@ -1384,7 +1384,7 @@ void create_annot_cplx_nodes(UC* uc, int size_substring, int nb_substring){
     tot_new_size_line = nb_substring * size_substring;
     size_line_cplx_n = max_size_annot + SIZE_BYTE_CPLX_N;
 
-    new_tab_suffixes = calloc(tot_new_size_line + nb_possible_cplx_n * size_line_cplx_n, sizeof(uint8_t));
+    new_tab_suffixes = (uint8_t*) calloc(tot_new_size_line + nb_possible_cplx_n * size_line_cplx_n, sizeof(uint8_t));
     ASSERT_NULL_PTR(new_tab_suffixes,"create_annot_cplx_nodes()")
 
     extend_annot = &(new_tab_suffixes[tot_new_size_line]);

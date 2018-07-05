@@ -178,7 +178,7 @@ void quicksort_uint64(uint64_t* a, uint64_t* b, uint64_t p, uint64_t r)
 
 int* quicksort_init(uint8_t* substrings, int size_line_sub, int p, int r)
 {
-    int* tab_ind = malloc((r+1)*sizeof(int));
+    int* tab_ind = (int*) malloc((r+1)*sizeof(int));
 
     ASSERT_NULL_PTR(substrings,"quicksort_init()")
     ASSERT_NULL_PTR(tab_ind,"quicksort_init()")

@@ -15,7 +15,7 @@ void compress_annotations_disk(BFT_Root* bft, char* filename_bft){
     int len_longest_annot;
     int lvl_bft = (bft->k / NB_CHAR_SUF_PREF) - 1;
 
-    char* filename_bft_tmp = malloc((strlen(filename_bft) + 50) * sizeof(char));
+    char* filename_bft_tmp = (char*) malloc((strlen(filename_bft) + 50) * sizeof(char));
     ASSERT_NULL_PTR(filename_bft_tmp, "compress_annotations_disk()\n")
 
     strcpy(filename_bft_tmp, filename_bft);
@@ -50,7 +50,7 @@ void compress_annotations_disk(BFT_Root* bft, char* filename_bft){
     #if defined (_WORDx86)
         Word_t * PValue;
 
-        uint8_t* it_index = calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T - 1) + 4), sizeof(uint8_t));
+        uint8_t* it_index = (uint8_t*) calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T - 1) + 4), sizeof(uint8_t));
         ASSERT_NULL_PTR(it_index, "compressKmers_from_KmerFiles()\n");
 
         JSLF(PValue, comp_annots, it_index);
@@ -97,10 +97,10 @@ void insert_Genomes_from_KmerFiles(BFT_Root* root, int nb_files, char** filename
 
     FILE* file;
 
-    uint8_t* array_kmers = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    uint8_t* array_kmers = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(array_kmers,"insert_Genomes_from_KmerFiles()")
 
-    char* line = calloc(100, sizeof(char));
+    char* line = (char*) calloc(100, sizeof(char));
     ASSERT_NULL_PTR(line,"insert_Genomes_from_KmerFiles()")
 
     char* str_tmp;
@@ -245,10 +245,10 @@ void insert_Genomes_from_FASTxFiles(BFT_Root* root, int nb_files, char** filenam
 
     char* str_tmp;
 
-    char* buf_tmp = calloc((size_kmer-1)*2, sizeof(char)); //Allocate temporary buffer
+    char* buf_tmp = (char*) calloc((size_kmer-1)*2, sizeof(char)); //Allocate temporary buffer
     ASSERT_NULL_PTR(buf_tmp,"insert_Genomes_from_FASTxFiles()")
 
-    uint8_t* tab_kmers = calloc(SIZE_BUFFER*nb_cell_kmer, sizeof(uint8_t)); //Allocate buffer for kmers
+    uint8_t* tab_kmers = (uint8_t*) calloc(SIZE_BUFFER*nb_cell_kmer, sizeof(uint8_t)); //Allocate buffer for kmers
     ASSERT_NULL_PTR(tab_kmers,"insert_Genomes_from_FASTxFiles()")
 
     uint64_t kmers_read = 0;
@@ -355,7 +355,7 @@ void insert_Genomes_from_FASTxFiles(BFT_Root* root, int nb_files, char** filenam
                 #if defined (_WORDx86)
                     Word_t * PValue;
 
-                    uint8_t* it_index = calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T) + 4), sizeof(uint8_t));
+                    uint8_t* it_index = (uint8_t*) calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T) + 4), sizeof(uint8_t));
                     ASSERT_NULL_PTR(it_index, "sort_annotations()");
 
                     JSLF(PValue, PJArray, it_index);
@@ -435,13 +435,13 @@ void insert_Genomes_from_FASTxFiles(BFT_Root* root, int nb_files, char** filenam
     uint8_t* annot_ext;
     uint8_t* annot_cplx;
 
-    uint8_t* annot_res = calloc(CEIL(root->nb_genomes+2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
+    uint8_t* annot_res = (uint8_t*) calloc(CEIL(root->nb_genomes+2, SIZE_BITS_UINT_8T), sizeof(uint8_t));
     ASSERT_NULL_PTR(annot_res,"queryBFT_kmerPresences_from_KmerFiles()")
 
-    uint8_t* array_kmers = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    uint8_t* array_kmers = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(array_kmers,"queryBFT_kmerPresences_from_KmerFiles()")
 
-    char* line = calloc(100, sizeof(char));
+    char* line = (char*) calloc(100, sizeof(char));
     ASSERT_NULL_PTR(line,"queryBFT_kmerPresences_from_KmerFiles()")
 
     file_query = fopen(query_filename, "r");
@@ -684,13 +684,13 @@ int queryBFT_kmerPresences_from_KmerFiles(BFT_Root* root, char* query_filename, 
 
     bool* is_iupac;
 
-    char* buffer_queries = calloc(size_buffer_queries, sizeof(char));
+    char* buffer_queries = (char*) calloc(size_buffer_queries, sizeof(char));
     ASSERT_NULL_PTR(buffer_queries,"query_sequences_outputCSV()\n");
 
-    char* csv_line_res = calloc(root->nb_genomes * 2, sizeof(char));
+    char* csv_line_res = (char*) calloc(root->nb_genomes * 2, sizeof(char));
     ASSERT_NULL_PTR(csv_line_res,"query_sequences_outputCSV()\n");
 
-    uint8_t* array_kmers = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    uint8_t* array_kmers = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(array_kmers,"queryBFT_kmerPresences_from_KmerFiles()")
 
     FILE* file_query = fopen(query_filename, "r");
@@ -774,7 +774,7 @@ int queryBFT_kmerPresences_from_KmerFiles(BFT_Root* root, char* query_filename, 
     }
     else{
 
-        is_iupac = malloc(nb_kmer_in_buf * sizeof(bool));
+        is_iupac = (bool*) malloc(nb_kmer_in_buf * sizeof(bool));
         ASSERT_NULL_PTR(is_iupac, "queryBFT_kmerPresences_from_KmerFiles()")
 
         res_get_line = getline(&buffer_queries, &size_buffer_queries, file_query);
@@ -916,10 +916,10 @@ int queryBFT_kmerBranching_from_KmerFiles(BFT_Root* root, char* query_filename, 
 
     size_t return_fread;
 
-    uint8_t* array_kmers = calloc(SIZE_BUFFER, sizeof(uint8_t));
+    uint8_t* array_kmers = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
     ASSERT_NULL_PTR(array_kmers,"queryBFT_kmerBranching_from_KmerFiles()")
 
-    char* line = calloc(100, sizeof(char));
+    char* line = (char*) calloc(100, sizeof(char));
     ASSERT_NULL_PTR(line,"queryBFT_kmerBranching_from_KmerFiles()")
 
     root->skip_sp = build_skip_nodes(&(root->node));
@@ -1092,48 +1092,48 @@ int queryBFT_kmerBranching_from_KmerFiles(BFT_Root* root, char* query_filename, 
 
             len_output_filename = strlen(prefix_output);
 
-            nb_bfts_on_disk = calloc(nb_threads, sizeof(int));
+            nb_bfts_on_disk = (int*) calloc(nb_threads, sizeof(int));
             ASSERT_NULL_PTR(nb_bfts_on_disk, "par_insert_Genomes_from_KmerFiles()\n")
 
-            output_filename = malloc(nb_threads * sizeof(char*));
+            output_filename = (char**) malloc(nb_threads * sizeof(char*));
             ASSERT_NULL_PTR(output_filename, "par_insert_Genomes_from_KmerFiles()\n")
 
-            output_filename2 = malloc(nb_threads * sizeof(char*));
+            output_filename2 = (char**) malloc(nb_threads * sizeof(char*));
             ASSERT_NULL_PTR(output_filename2, "par_insert_Genomes_from_KmerFiles()\n")
 
-            output_filename3 = malloc((len_output_filename + 30) * sizeof(char));
+            output_filename3 = (char*) malloc((len_output_filename + 30) * sizeof(char));
             ASSERT_NULL_PTR(output_filename3, "merging_BFT()\n");
 
             strcpy(output_filename3, prefix_output);
             strcpy(&output_filename3[strlen(output_filename3)], "_tmp");
 
-            line = malloc(nb_threads * sizeof(char*));
+            line = (char**) malloc(nb_threads * sizeof(char*));
             ASSERT_NULL_PTR(line, "par_insert_Genomes_from_KmerFiles()\n")
 
-            array_kmers = malloc(nb_threads * sizeof(uint8_t*));
+            array_kmers = (uint8_t**) malloc(nb_threads * sizeof(uint8_t*));
             ASSERT_NULL_PTR(array_kmers, "par_insert_Genomes_from_KmerFiles()\n")
 
-            file = malloc(nb_threads * sizeof(FILE*));
+            file = (FILE**) malloc(nb_threads * sizeof(FILE*));
             ASSERT_NULL_PTR(file, "par_insert_Genomes_from_KmerFiles()\n")
 
-            PJArray = malloc(nb_threads * sizeof(PWord_t));
+            PJArray = (PWord_t*) malloc(nb_threads * sizeof(PWord_t));
             ASSERT_NULL_PTR(PJArray, "par_insert_Genomes_from_KmerFiles()\n")
 
-            root = malloc(nb_threads * sizeof(BFT_Root*));
+            root = (BFT_Root**) malloc(nb_threads * sizeof(BFT_Root*));
             ASSERT_NULL_PTR(root, "par_insert_Genomes_from_KmerFiles()\n")
 
             for (it_thread = 0; it_thread < nb_threads; it_thread++){
 
-                line[it_thread] = calloc(100, sizeof(char));
+                line[it_thread] = (char*) calloc(100, sizeof(char));
                 ASSERT_NULL_PTR(line[it_thread], "par_insert_Genomes_from_KmerFiles()\n")
 
-                array_kmers[it_thread] = calloc(SIZE_BUFFER, sizeof(uint8_t));
+                array_kmers[it_thread] = (uint8_t*) calloc(SIZE_BUFFER, sizeof(uint8_t));
                 ASSERT_NULL_PTR(array_kmers[it_thread], "par_insert_Genomes_from_KmerFiles()\n")
 
-                output_filename[it_thread] = malloc((len_output_filename + 30) * sizeof(char));
+                output_filename[it_thread] = (char*) malloc((len_output_filename + 30) * sizeof(char));
                 ASSERT_NULL_PTR(output_filename[it_thread], "merging_BFT()\n");
 
-                output_filename2[it_thread] = malloc((len_output_filename + 30) * sizeof(char));
+                output_filename2[it_thread] = (char*) malloc((len_output_filename + 30) * sizeof(char));
                 ASSERT_NULL_PTR(output_filename2[it_thread], "merging_BFT()\n");
 
                 strcpy(output_filename[it_thread], prefix_output);
@@ -1281,7 +1281,7 @@ int queryBFT_kmerBranching_from_KmerFiles(BFT_Root* root, char* query_filename, 
                     #if defined (_WORDx86)
                         Word_t * PValue;
 
-                        uint8_t* it_index = calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T) + 4), sizeof(uint8_t));
+                        uint8_t* it_index = (uint8_t*) calloc((len_longest_annot + CEIL(len_longest_annot, SIZE_BITS_UINT_8T) + 4), sizeof(uint8_t));
                         ASSERT_NULL_PTR(it_index, "sort_annotations()");
 
                         JSLF(PValue, PJArray[thread_id], it_index);
@@ -1487,10 +1487,10 @@ void query_sequences_outputCSV(BFT_Root* root, char* query_filename, char* outpu
 
     uint32_t* ids_present;
 
-    char* buffer_queries = calloc(size_buffer_queries, sizeof(char));
+    char* buffer_queries = (char*) calloc(size_buffer_queries, sizeof(char));
     ASSERT_NULL_PTR(buffer_queries,"query_sequences_outputCSV()\n");
 
-    char* csv_line_res = calloc(root->nb_genomes * 2, sizeof(char));
+    char* csv_line_res = (char*) calloc(root->nb_genomes * 2, sizeof(char));
     ASSERT_NULL_PTR(csv_line_res,"query_sequences_outputCSV()\n");
 
     FILE* file_query = fopen(query_filename, "r");

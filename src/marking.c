@@ -53,7 +53,7 @@ void create_marking_CC_4states(CC* cc, int lvl_cc, int size_kmer, info_per_level
                         + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes);
 
             if (tot + sup_bytes > 0){
-                uc->suffixes = realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "create_marking_CC_4states")
 
                 memset(&(uc->suffixes[tot]), 0, sup_bytes * sizeof(uint8_t));
@@ -75,7 +75,7 @@ void create_marking_CC_4states(CC* cc, int lvl_cc, int size_kmer, info_per_level
             sup_bytes = CEIL(uc->nb_children * 2, SIZE_BITS_UINT_8T);
 
             if (tot + sup_bytes > 0){
-                uc->suffixes = realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "create_marking_CC_4states")
 
                 memset(&(uc->suffixes[tot]), 0, sup_bytes * sizeof(uint8_t));
@@ -102,7 +102,7 @@ void create_marking_UC_4states(UC* uc, int lvl_uc, info_per_level*  info_per_lvl
     int sup_bytes = CEIL(nb_elt * 2, SIZE_BITS_UINT_8T);
 
     if (tot + sup_bytes > 0){
-        uc->suffixes = realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
+        uc->suffixes = (uint8_t*) realloc(uc->suffixes, (tot + sup_bytes) * sizeof(uint8_t));
         ASSERT_NULL_PTR(uc->suffixes, "create_marking_UC_4states")
 
         memset(&(uc->suffixes[tot]), 0, sup_bytes * sizeof(uint8_t));
@@ -148,13 +148,13 @@ void delete_marking_CC_4states(CC* cc, int lvl_cc, int size_kmer, info_per_level
             uc = &(((UC*)cc->children)[i]);
 
             if (i != nb_skp-1){
-                uc->suffixes = realloc(uc->suffixes, (info_per_lvl[lvl_cc].nb_ucs_skp * uc->size_annot
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, (info_per_lvl[lvl_cc].nb_ucs_skp * uc->size_annot
                                                       + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                                       + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes))
                                                         * sizeof(uint8_t));
             }
             else{
-                uc->suffixes = realloc(uc->suffixes, ((cc->nb_elem - i * info_per_lvl[lvl_cc].nb_ucs_skp) * uc->size_annot
+                uc->suffixes = (uint8_t*) realloc(uc->suffixes, ((cc->nb_elem - i * info_per_lvl[lvl_cc].nb_ucs_skp) * uc->size_annot
                                                       + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                                       + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes))
                                                         * sizeof(uint8_t));
@@ -171,7 +171,7 @@ void delete_marking_CC_4states(CC* cc, int lvl_cc, int size_kmer, info_per_level
 
             uc = &(((UC*)cc->children)[i]);
 
-            uc->suffixes = realloc(uc->suffixes, (uc->nb_children * (size_substring + uc->size_annot)
+            uc->suffixes = (uint8_t*) realloc(uc->suffixes, (uc->nb_children * (size_substring + uc->size_annot)
                                                   + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                                   + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes))
                                                 * sizeof(uint8_t));
@@ -190,7 +190,7 @@ void delete_marking_UC_4states(UC* uc, int size_substring, int nb_children){
     ASSERT_NULL_PTR(uc, "delete_marking_UC_4states()")
     ASSERT_NULL_PTR(uc->suffixes, "delete_marking_UC_4states()")
 
-    uc->suffixes = realloc(uc->suffixes, (nb_children * (size_substring + uc->size_annot)
+    uc->suffixes = (uint8_t*) realloc(uc->suffixes, (nb_children * (size_substring + uc->size_annot)
                                           + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                           + uc->nb_cplx_nodes * (SIZE_BYTE_CPLX_N + uc->size_annot_cplx_nodes))
                                             * sizeof(uint8_t));

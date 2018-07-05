@@ -282,7 +282,7 @@ BFT_Root* read_BFT_Root_offset(char* filename, long int offset_read){
 
     if (root->length_comp_set_colors){
 
-        root->comp_set_colors = malloc(root->length_comp_set_colors * sizeof(annotation_array_elem));
+        root->comp_set_colors = (annotation_array_elem*) malloc(root->length_comp_set_colors * sizeof(annotation_array_elem));
         ASSERT_NULL_PTR(root->comp_set_colors, "read_BFT_Root() 2")
 
         for (i=0; i<root->length_comp_set_colors; i++){
@@ -297,7 +297,7 @@ BFT_Root* read_BFT_Root_offset(char* filename, long int offset_read){
 
             if (tmp){
 
-                root->comp_set_colors[i].annot_array = malloc(tmp * sizeof(uint8_t));
+                root->comp_set_colors[i].annot_array = (uint8_t*) malloc(tmp * sizeof(uint8_t));
                 ASSERT_NULL_PTR(root->comp_set_colors[i].annot_array, "read_BFT_Root() 3")
 
                 if (fread(root->comp_set_colors[i].annot_array, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_BFT_Root()")
@@ -322,7 +322,7 @@ BFT_Root* read_BFT_Root_offset(char* filename, long int offset_read){
     else root->ann_inf = create_annotation_inform(root->nb_genomes, root->compressed == 1);
 
     if (root->nb_genomes){
-        root->filenames = malloc(root->nb_genomes * sizeof(char*));
+        root->filenames = (char**) malloc(root->nb_genomes * sizeof(char*));
         ASSERT_NULL_PTR(root->filenames, "read_BFT_Root() 4")
     }
 
@@ -330,7 +330,7 @@ BFT_Root* read_BFT_Root_offset(char* filename, long int offset_read){
 
         if (fread(&str_len, sizeof(uint16_t), 1, file) != 1) ERROR("read_BFT_Root()")
 
-        root->filenames[i] = malloc(str_len * sizeof(char));
+        root->filenames[i] = (char*) malloc(str_len * sizeof(char));
         ASSERT_NULL_PTR(root->filenames[i], "read_BFT_Root()")
 
         if (fread(root->filenames[i], sizeof(char), str_len, file) != str_len) ERROR("read_BFT_Root()")
@@ -372,7 +372,7 @@ void read_Node(Node* node, BFT_Root* root, int lvl_node, FILE* file, int size_km
 
     if (count_ccs){
 
-        node->CC_array = malloc(count_ccs * sizeof(CC));
+        node->CC_array = (CC*) malloc(count_ccs * sizeof(CC));
         ASSERT_NULL_PTR(node->CC_array,"read_Node()\n")
 
         for (uint32_t i = 0; i < count_ccs; i++) read_CC(&(((CC*)node->CC_array)[i]), root, lvl_node, file, size_kmer);
@@ -417,7 +417,7 @@ void read_UC(UC* uc, BFT_Root* root, FILE* file, int size_substring, uint16_t nb
             size_uc_suffixes = nb_children * size_line + uc->nb_extended_annot * SIZE_BYTE_EXT_ANNOT
                                 + uc->nb_cplx_nodes * (uc->size_annot_cplx_nodes + SIZE_BYTE_CPLX_N);
 
-            uc->suffixes = malloc(size_uc_suffixes * sizeof(uint8_t));
+            uc->suffixes = (uint8_t*) malloc(size_uc_suffixes * sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes, "read_UC() 4")
 
             if (fread(uc->suffixes, sizeof(uint8_t), size_uc_suffixes, file) != size_uc_suffixes) ERROR("read_UC() 5")
@@ -429,7 +429,7 @@ void read_UC(UC* uc, BFT_Root* root, FILE* file, int size_substring, uint16_t nb
 
                 size_uc_suffixes = nb_children * size_line;
 
-                uc->suffixes = calloc(size_uc_suffixes, sizeof(uint8_t));
+                uc->suffixes = (uint8_t*) calloc(size_uc_suffixes, sizeof(uint8_t));
                 ASSERT_NULL_PTR(uc->suffixes, "read_UC()6 ")
 
                 for (i = 0, j = size_substring; i < nb_children * size_line; i += size_line, j = size_substring){
@@ -472,7 +472,7 @@ void read_UC(UC* uc, BFT_Root* root, FILE* file, int size_substring, uint16_t nb
 
             decomp_size_line = size_substring + size_decomp;
 
-            uc_suffixes_tmp = calloc(nb_children * decomp_size_line, sizeof(uint8_t));
+            uc_suffixes_tmp = (uint8_t*) calloc(nb_children * decomp_size_line, sizeof(uint8_t));
             ASSERT_NULL_PTR(uc->suffixes, "read_UC() 8")
 
             for (i = 0, j = 0, k = 0; j < nb_children; i += size_line, j++, k += decomp_size_line){
@@ -570,7 +570,7 @@ void read_CC(CC*  cc, BFT_Root* root, int lvl_cc, FILE* file, int size_kmer){
     if (cc->nb_elem >= root->info_per_lvl[lvl_cc].tresh_suf_pref) skipFilter2 = MASK_POWER_16[p]/root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter2; //SkipFilter2
     else skipFilter2 = 0;
 
-    cc->BF_filter2 = calloc(bf_filter2 + skipFilter2 + skipFilter3, sizeof(uint8_t));
+    cc->BF_filter2 = (uint8_t*) calloc(bf_filter2 + skipFilter2 + skipFilter3, sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->BF_filter2,"read_CC() 4")
     if (fread(&(cc->BF_filter2[size_bf]), sizeof(uint8_t), bf_filter2-size_bf, file) != bf_filter2 - size_bf)
         ERROR("read_CC() 5")
@@ -584,23 +584,23 @@ void read_CC(CC*  cc, BFT_Root* root, int lvl_cc, FILE* file, int size_kmer){
     else if (IS_ODD(cc->nb_elem)) tmp = (cc->nb_elem/2)+1;
     else tmp = cc->nb_elem/2;
 
-    cc->filter3 = malloc(tmp * sizeof(uint8_t));
+    cc->filter3 = (uint8_t*) malloc(tmp * sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->filter3,"read_CC()6")
     if (fread(cc->filter3, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_CC() 7")
 
     if (root->info_per_lvl[lvl_cc].level_min == 1){
         tmp = CEIL(cc->nb_elem,SIZE_BITS_UINT_8T);
-        cc->extra_filter3 = malloc(tmp * sizeof(uint8_t));
+        cc->extra_filter3 = (uint8_t*) malloc(tmp * sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->extra_filter3,"read_CC() 8")
         if (fread(cc->extra_filter3, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_CC() 9")
     }
     else cc->extra_filter3 = NULL;
 
-    cc->children = malloc(nb_skp * sizeof(UC));
+    cc->children = (UC*) malloc(nb_skp * sizeof(UC));
     ASSERT_NULL_PTR(cc->children,"read_CC() 10")
 
     if (cc->nb_Node_children != 0){
-        cc->children_Node_container = malloc(cc->nb_Node_children * sizeof(Node));
+        cc->children_Node_container = (Node*) malloc(cc->nb_Node_children * sizeof(Node));
         ASSERT_NULL_PTR(cc->children_Node_container,"read_CC() 11")
     }
     else cc->children_Node_container = NULL;
@@ -608,13 +608,13 @@ void read_CC(CC*  cc, BFT_Root* root, int lvl_cc, FILE* file, int size_kmer){
     if (lvl_cc){
 
         if (type){
-            cc->children_type = malloc(cc->nb_elem * sizeof(uint8_t));
+            cc->children_type = (uint8_t*) malloc(cc->nb_elem * sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->children_type,"read_CC() 13")
             if (fread(cc->children_type, sizeof(uint8_t), (size_t)cc->nb_elem, file) != (size_t)cc->nb_elem)
                 ERROR("read_CC() 14");
         }
         else{
-            cc->children_type = malloc(CEIL(cc->nb_elem,2) * sizeof(uint8_t));
+            cc->children_type = (uint8_t*) malloc(CEIL(cc->nb_elem,2) * sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->children_type,"read_CC() 15")
             if (fread(cc->children_type, sizeof(uint8_t), (size_t)CEIL(cc->nb_elem,2), file) != (size_t)CEIL(cc->nb_elem,2))
                 ERROR("read_CC() 16")
@@ -825,7 +825,7 @@ void read_annotation_array_elem(char* filename, annotation_array_elem** annot_so
 
     if (*size_array){
 
-        *annot_sorted = malloc(*size_array * sizeof(annotation_array_elem));
+        *annot_sorted = (annotation_array_elem*) malloc(*size_array * sizeof(annotation_array_elem));
         ASSERT_NULL_PTR(*annot_sorted, "read_annotation_array_elem()\n")
 
         for (int i = 0; i < *size_array; i++){
@@ -840,7 +840,7 @@ void read_annotation_array_elem(char* filename, annotation_array_elem** annot_so
 
             if (tmp){
 
-                (*annot_sorted)[i].annot_array = malloc(tmp * sizeof(uint8_t));
+                (*annot_sorted)[i].annot_array = (uint8_t*) malloc(tmp * sizeof(uint8_t));
                 ASSERT_NULL_PTR((*annot_sorted)[i].annot_array, "read_annotation_array_elem()\n")
 
                 if (fread((*annot_sorted)[i].annot_array, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_annotation_array_elem()\n")
@@ -928,7 +928,7 @@ void read_BFT_replace_comp_annots_bis(BFT_Root* root, char* filename_bft, char* 
 
     if (root->length_comp_set_colors){
 
-        root->comp_set_colors = malloc(root->length_comp_set_colors * sizeof(annotation_array_elem));
+        root->comp_set_colors = (annotation_array_elem*) malloc(root->length_comp_set_colors * sizeof(annotation_array_elem));
         ASSERT_NULL_PTR(root->comp_set_colors, "read_BFT_replace_comp_annots() 2")
 
         for (i = 0; i < root->length_comp_set_colors; i++){
@@ -943,7 +943,7 @@ void read_BFT_replace_comp_annots_bis(BFT_Root* root, char* filename_bft, char* 
 
             if (tmp){
 
-                root->comp_set_colors[i].annot_array = malloc(tmp * sizeof(uint8_t));
+                root->comp_set_colors[i].annot_array = (uint8_t*) malloc(tmp * sizeof(uint8_t));
                 ASSERT_NULL_PTR(root->comp_set_colors[i].annot_array, "read_BFT_replace_comp_annots() 3")
 
                 if (fread(root->comp_set_colors[i].annot_array, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_BFT_replace_comp_annots()")
@@ -969,14 +969,14 @@ void read_BFT_replace_comp_annots_bis(BFT_Root* root, char* filename_bft, char* 
     if (root->compressed) root->ann_inf = create_annotation_inform(-1, root->compressed == 1);
     else root->ann_inf = create_annotation_inform(root->nb_genomes, root->compressed == 1);
 
-    root->filenames = malloc(root->nb_genomes * sizeof(char*));
+    root->filenames = (char**) malloc(root->nb_genomes * sizeof(char*));
     ASSERT_NULL_PTR(root->filenames, "read_BFT_replace_comp_annots() 4")
 
     for (i = 0; i < root->nb_genomes; i++){
 
         if (fread(&str_len, sizeof(uint16_t), 1, file) != 1) ERROR("read_BFT_replace_comp_annots()")
 
-        root->filenames[i] = malloc(str_len * sizeof(char));
+        root->filenames[i] = (char*) malloc(str_len * sizeof(char));
         ASSERT_NULL_PTR(root->filenames[i], "read_BFT_replace_comp_annots()")
 
         if (fread(root->filenames[i], sizeof(char), str_len, file) != str_len) ERROR("read_BFT_replace_comp_annots()")
@@ -1022,7 +1022,7 @@ void read_Node_replace_comp_annots(Node* node, BFT_Root* root, int lvl_node, FIL
 
     if (count_ccs){
 
-        node->CC_array = malloc(count_ccs * sizeof(CC));
+        node->CC_array = (CC*) malloc(count_ccs * sizeof(CC));
         ASSERT_NULL_PTR(node->CC_array,"read_Node_replace_comp_annots()\n")
 
         for (uint32_t i = 0; i < count_ccs; i++)
@@ -1070,7 +1070,7 @@ void read_CC_replace_comp_annots(CC* cc, BFT_Root* root, int lvl_cc, FILE* file,
     if (cc->nb_elem >= root->info_per_lvl[lvl_cc].tresh_suf_pref) skipFilter2 = MASK_POWER_16[p]/root->info_per_lvl[lvl_cc].nb_bits_per_cell_skip_filter2; //SkipFilter2
     else skipFilter2 = 0;
 
-    cc->BF_filter2 = calloc(bf_filter2 + skipFilter2 + skipFilter3, sizeof(uint8_t));
+    cc->BF_filter2 = (uint8_t*) calloc(bf_filter2 + skipFilter2 + skipFilter3, sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->BF_filter2,"read_CC_replace_comp_annots()\n")
 
     if (fread(&(cc->BF_filter2[size_bf]), sizeof(uint8_t), bf_filter2-size_bf, file) != bf_filter2 - size_bf)
@@ -1085,24 +1085,24 @@ void read_CC_replace_comp_annots(CC* cc, BFT_Root* root, int lvl_cc, FILE* file,
     else if (IS_ODD(cc->nb_elem)) tmp = (cc->nb_elem/2)+1;
     else tmp = cc->nb_elem/2;
 
-    cc->filter3 = malloc(tmp * sizeof(uint8_t));
+    cc->filter3 = (uint8_t*) malloc(tmp * sizeof(uint8_t));
     ASSERT_NULL_PTR(cc->filter3,"read_CC_replace_comp_annots()\n")
 
     if (fread(cc->filter3, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_CC_replace_comp_annots()\n")
 
     if (root->info_per_lvl[lvl_cc].level_min == 1){
         tmp = CEIL(cc->nb_elem,SIZE_BITS_UINT_8T);
-        cc->extra_filter3 = malloc(tmp * sizeof(uint8_t));
+        cc->extra_filter3 = (uint8_t*) malloc(tmp * sizeof(uint8_t));
         ASSERT_NULL_PTR(cc->extra_filter3,"read_CC_replace_comp_annots()\n")
         if (fread(cc->extra_filter3, sizeof(uint8_t), tmp, file) != tmp) ERROR("read_CC_replace_comp_annots()\n")
     }
     else cc->extra_filter3 = NULL;
 
-    cc->children = malloc(nb_skp * sizeof(UC));
+    cc->children = (UC*) malloc(nb_skp * sizeof(UC));
     ASSERT_NULL_PTR(cc->children,"read_CC_replace_comp_annots()\n")
 
     if (cc->nb_Node_children != 0){
-        cc->children_Node_container = malloc(cc->nb_Node_children * sizeof(Node));
+        cc->children_Node_container = (Node*) malloc(cc->nb_Node_children * sizeof(Node));
         ASSERT_NULL_PTR(cc->children_Node_container,"read_CC_replace_comp_annots()\n")
     }
     else cc->children_Node_container = NULL;
@@ -1110,13 +1110,13 @@ void read_CC_replace_comp_annots(CC* cc, BFT_Root* root, int lvl_cc, FILE* file,
     if (lvl_cc){
 
         if (type){
-            cc->children_type = malloc(cc->nb_elem * sizeof(uint8_t));
+            cc->children_type = (uint8_t*) malloc(cc->nb_elem * sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->children_type,"read_CC_replace_comp_annots()\n")
             if (fread(cc->children_type, sizeof(uint8_t), (size_t)cc->nb_elem, file) != (size_t)cc->nb_elem)
                 ERROR("read_CC_replace_comp_annots()\n");
         }
         else{
-            cc->children_type = malloc(CEIL(cc->nb_elem,2) * sizeof(uint8_t));
+            cc->children_type = (uint8_t*) malloc(CEIL(cc->nb_elem,2) * sizeof(uint8_t));
             ASSERT_NULL_PTR(cc->children_type,"read_CC() 15")
             if (fread(cc->children_type, sizeof(uint8_t), (size_t)CEIL(cc->nb_elem,2), file) != (size_t)CEIL(cc->nb_elem,2))
                 ERROR("read_CC_replace_comp_annots()\n")

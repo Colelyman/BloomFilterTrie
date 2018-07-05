@@ -36,7 +36,7 @@ size_t iterate_over_kmers_from_node(Node* n, BFT_Root* root, int lvl_node, uint8
 
     uint8_t kmer_tmp[size_kmer_array];
 
-    resultPresence* res_cpy = malloc(sizeof(resultPresence));
+    resultPresence* res_cpy = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res_cpy, "l_iterate_over_kmers_from_node()\n");
 
     memcpy(res_cpy, bft_kmer->res, sizeof(resultPresence));
@@ -636,7 +636,7 @@ size_t iterate_over_prefixes_from_node(Node* n, BFT_Root* root, int lvl_node, ui
 
     uint8_t kmer_tmp[size_kmer_array];
 
-    resultPresence* res_cpy = malloc(sizeof(resultPresence));
+    resultPresence* res_cpy = (resultPresence*) malloc(sizeof(resultPresence));
     ASSERT_NULL_PTR(res_cpy, "l_iterate_over_kmers_from_node()\n");
 
     memcpy(res_cpy, bft_kmer->res, sizeof(resultPresence));

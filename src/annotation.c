@@ -957,7 +957,7 @@ annotation_array_elem* sort_annotations(Pvoid_t* JArray_annot, int* size_array, 
     uint8_t it1_first_size;
     uint8_t it2_first_size;
 
-    uint8_t* it_index = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* it_index = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(it_index, "sort_annotations()");
 
     uint8_t* first_index = NULL;
@@ -985,13 +985,13 @@ annotation_array_elem* sort_annotations(Pvoid_t* JArray_annot, int* size_array, 
 
         if (annot_list == NULL){
 
-            first_index = malloc((length_index + 1) * sizeof(uint8_t));
+            first_index = (uint8_t*) malloc((length_index + 1) * sizeof(uint8_t));
             ASSERT_NULL_PTR(first_index, "sort_annotations()");
 
             size_annot_list = real_size;
             *size_array = real_size;
 
-            annot_list = calloc(size_annot_list, sizeof(annotation_array_elem));
+            annot_list = (annotation_array_elem*) calloc(size_annot_list, sizeof(annotation_array_elem));
             ASSERT_NULL_PTR(annot_list, "sort_annotations()")
 
             for (tmp = 0; tmp < size_annot_list; tmp++){
@@ -1062,7 +1062,7 @@ annotation_array_elem* sort_annotations(Pvoid_t* JArray_annot, int* size_array, 
 
         pos_annot_list = size_annot_list-real_size;
         annot_list[pos_annot_list].size_annot = real_size;
-        annot_list[pos_annot_list].annot_array = calloc(size_annot_array, sizeof(uint8_t));
+        annot_list[pos_annot_list].annot_array = (uint8_t*) calloc(size_annot_array, sizeof(uint8_t));
 
         JSLL(PValue_annot, *JArray_annot, it_index);
 
@@ -1122,7 +1122,7 @@ annotation_array_elem* sort_annotations(Pvoid_t* JArray_annot, int* size_array, 
         annot_list[pos_annot_list].last_index = next_id - 1;
 
         JLFA(Rc_word, PArray_sizes);
-        //annot_list[pos_annot_list].annot_array = realloc(annot_list[pos_annot_list].annot_array, nb_annot_with_first_size * real_size * sizeof(uint8_t));
+        //annot_list[pos_annot_list].annot_array = (uint8_t*) realloc(annot_list[pos_annot_list].annot_array, nb_annot_with_first_size * real_size * sizeof(uint8_t));
 
         old_id = next_id;
     }
@@ -1161,7 +1161,7 @@ void sort_annotations2(char* filename_annot_array_elem, Pvoid_t* JArray_annot, a
 
     Pvoid_t PArray_sizes = (Pvoid_t) NULL;
 
-    annotation_array_elem* annot_list = calloc(1, sizeof(annotation_array_elem));
+    annotation_array_elem* annot_list = (annotation_array_elem*) calloc(1, sizeof(annotation_array_elem));
     ASSERT_NULL_PTR(annot_list, "sort_annotations()")
 
     int j;
@@ -1195,10 +1195,10 @@ void sort_annotations2(char* filename_annot_array_elem, Pvoid_t* JArray_annot, a
     uint8_t it1_first_size;
     uint8_t it2_first_size;
 
-    uint8_t* it_index = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* it_index = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(it_index, "sort_annotations()");
 
-    uint8_t* first_index = calloc(tot_cell_index, sizeof(uint8_t));
+    uint8_t* first_index = (uint8_t*) calloc(tot_cell_index, sizeof(uint8_t));
     ASSERT_NULL_PTR(first_index, "sort_annotations()");
 
     uint8_t* it_index_tmp;
@@ -1291,7 +1291,7 @@ void sort_annotations2(char* filename_annot_array_elem, Pvoid_t* JArray_annot, a
 
         memcpy(it_index, first_index, (length_index + 1) * sizeof(uint8_t));
 
-        annot_list->annot_array = calloc(size_annot_array, sizeof(uint8_t));
+        annot_list->annot_array = (uint8_t*) calloc(size_annot_array, sizeof(uint8_t));
         ASSERT_NULL_PTR(annot_list->annot_array, "sort_annotations2()\n")
 
         JSLL(PValue_annot, *JArray_annot, it_index);
@@ -1425,10 +1425,10 @@ void sort_annotations3(Pvoid_t* JArray_annot, uint32_t longest_annot){
     uint8_t it1_first_size;
     uint8_t it2_first_size;
 
-    uint8_t* it_index = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* it_index = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(it_index, "sort_annotations()");
 
-    uint8_t* first_index = calloc(tot_cell_index, sizeof(uint8_t));
+    uint8_t* first_index = (uint8_t*) calloc(tot_cell_index, sizeof(uint8_t));
     ASSERT_NULL_PTR(first_index, "sort_annotations()");
 
     memset(it_index, 0xff, tot_cell_index * sizeof(uint8_t));
@@ -1566,7 +1566,7 @@ void replace_annots_comp(annotation_array_elem* comp_colors, Pvoid_t* JArray_ann
     int file = open(filename_new_comp_colors, O_RDWR);
     if (file == -1) ERROR("replace_annots_comp()\n")
 
-    uint8_t* index = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* index = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(index, "replace_annots_comp()\n");
 
     uint8_t* index_tmp;
@@ -1675,10 +1675,10 @@ void write_partial_comp_set_colors(char* filename_annot_array_elem, Pvoid_t* JAr
     int file = open(filename_annot_array_elem, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
     if (file == -1) ERROR("write_partial_comp_set_colors()\n")
 
-    uint8_t* index = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* index = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(index, "write_partial_comp_set_colors()");
 
-    uint8_t* index_cpy = malloc(tot_cell_index * sizeof(uint8_t));
+    uint8_t* index_cpy = (uint8_t*) malloc(tot_cell_index * sizeof(uint8_t));
     ASSERT_NULL_PTR(index_cpy, "write_partial_comp_set_colors()");
 
     uint8_t* it_index_start;
@@ -1941,7 +1941,7 @@ void printAnnotation_CSV(FILE* file_output, uint8_t* annot, int size_annot, uint
 
     uint8_t* annot_real = annot;
 
-    uint8_t* annot_flag0 = calloc(size_annot_flag0, sizeof(uint8_t));
+    uint8_t* annot_flag0 = (uint8_t*) calloc(size_annot_flag0, sizeof(uint8_t));
     ASSERT_NULL_PTR(annot_flag0, "printAnnotation_CSV()")
 
     static const char* presence_genomes[16] = {"0,0,0,0,", "1,0,0,0,", "0,1,0,0,", "1,1,0,0,",
@@ -1971,7 +1971,7 @@ void printAnnotation_CSV(FILE* file_output, uint8_t* annot, int size_annot, uint
             annot_real = extract_from_annotation_array_elem(annot_sorted, position, &size);
         }
         else if (annot_sup != NULL){
-            annot_real = malloc(size*sizeof(uint8_t));
+            annot_real = (uint8_t*) malloc(size*sizeof(uint8_t));
             memcpy(annot_real, annot, size_annot*sizeof(uint8_t));
             annot_real[size_annot] = annot_sup[0];
         }
@@ -2183,7 +2183,7 @@ void get_id_genomes_from_annot(annotation_inform* ann_inf, annotation_array_elem
 
                 int nb_id_stored_cpy = 0;
 
-                uint32_t* id_stored_cpy = malloc(ann_inf->nb_id_stored * sizeof(uint32_t));
+                uint32_t* id_stored_cpy = (uint32_t*) malloc(ann_inf->nb_id_stored * sizeof(uint32_t));
                 ASSERT_NULL_PTR(id_stored_cpy, "get_id_genomes_from_annot()\n")
 
                 memcpy(id_stored_cpy, ann_inf->id_stored, ann_inf->nb_id_stored * sizeof(uint32_t));
@@ -2366,8 +2366,8 @@ annotation_array_elem* cmp_annots(uint8_t* annot1, int size_annot1, uint8_t* ann
     int size1 = size_annot1 + size_annot_sup1;
     int size2 = size_annot2 + size_annot_sup2;
 
-    uint8_t* annot1_flag0 = calloc(size_annot_flag0, sizeof(uint8_t));
-    uint8_t* annot2_flag0 = calloc(size_annot_flag0, sizeof(uint8_t));
+    uint8_t* annot1_flag0 = (uint8_t*) calloc(size_annot_flag0, sizeof(uint8_t));
+    uint8_t* annot2_flag0 = (uint8_t*) calloc(size_annot_flag0, sizeof(uint8_t));
 
     uint8_t* annot1_real = annot1;
     uint8_t* annot2_real = annot2;
@@ -2394,7 +2394,7 @@ annotation_array_elem* cmp_annots(uint8_t* annot1, int size_annot1, uint8_t* ann
             annot1_real = extract_from_annotation_array_elem(annot_sorted, position, &size1);
         }
         else if (annot_sup1 != NULL){
-            annot1_real = malloc(size1 * sizeof(uint8_t));
+            annot1_real = (uint8_t*) malloc(size1 * sizeof(uint8_t));
             memcpy(annot1_real, annot1, size_annot1 * sizeof(uint8_t));
             annot1_real[size_annot1] = annot_sup1[0];
         }
@@ -2424,7 +2424,7 @@ annotation_array_elem* cmp_annots(uint8_t* annot1, int size_annot1, uint8_t* ann
             annot2_real = extract_from_annotation_array_elem(annot_sorted, position, &size2);
         }
         else if (annot_sup2 != NULL){
-            annot2_real = malloc(size2 * sizeof(uint8_t));
+            annot2_real = (uint8_t*) malloc(size2 * sizeof(uint8_t));
             memcpy(annot2_real, annot2, size_annot2 * sizeof(uint8_t));
             annot2_real[size_annot2] = annot_sup2[0];
         }
@@ -2542,7 +2542,7 @@ annotation_array_elem* cmp_annots(uint8_t* annot1, int size_annot1, uint8_t* ann
     if ((annot1 != NULL) && ((annot1[0] & 0x3) != 3) && (annot_sup1 != NULL)) free(annot1_real);
     if ((annot2 != NULL) && ((annot2[0] & 0x3) != 3) && (annot_sup2 != NULL)) free(annot2_real);
 
-    annotation_array_elem* ann_arr_elem = malloc(sizeof(annotation_array_elem));
+    annotation_array_elem* ann_arr_elem = (annotation_array_elem*) malloc(sizeof(annotation_array_elem));
     ASSERT_NULL_PTR(ann_arr_elem, "intersection_annotations()");
 
     ann_arr_elem->annot_array = annot1_flag0;
