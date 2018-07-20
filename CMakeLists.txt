@@ -76,7 +76,7 @@ ExternalProject_Get_Property(project_jemalloc install_dir)
 add_library(jemalloc STATIC IMPORTED)
 set_property(TARGET jemalloc PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc.a)
 set_property(TARGET jemalloc PROPERTY POSITION_INDEPENDENT_CODE ON)
-target_include_directories(bft PUBLIC "${install_dir}/include")
+include_directories(bft PUBLIC "${install_dir}/include")
 
 add_dependencies(bft jemalloc)
 add_dependencies(bft_static jemalloc)
