@@ -16,9 +16,8 @@ add_library(bft OBJECT "")
 
 # the bft executable
 add_executable(bft_bin $<TARGET_OBJECTS:bft> ${CMAKE_SOURCE_DIR}/src/main.c)
-set_target_properties(bft_bin
-  PROPERTIES OUTPUT_NAME bft)
-target_include_directories(bft_bin PRIVATE "${CMAKE_SOURCE_DIR}/include")
+set_target_properties(bft_bin PROPERTIES OUTPUT_NAME bft)
+target_include_directories(bft_bin PUBLIC "${CMAKE_SOURCE_DIR}/include")
 
 # the bft static library
 add_library(bft_static STATIC $<TARGET_OBJECTS:bft>)
@@ -48,19 +47,15 @@ ExternalProject_Add(project_judy
   PREFIX ${PROJECT_JUDY_PATH}
   CONFIGURE_COMMAND ${PROJECT_JUDY_PATH}/src/project_judy/configure --prefix=${PROJECT_JUDY_PATH}
   BUILD_IN_SOURCE TRUE
-  BUILD_COMMAND ${MAKE}
-)
+  BUILD_COMMAND ${MAKE})
 ExternalProject_Get_Property(project_judy install_dir)
 add_library(judy STATIC IMPORTED)
-set_property(TARGET judy PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libJudy.a)
-set_property(TARGET judy PROPERTY POSITION_INDEPENDENT_CODE ON)
-include_directories(bft PUBLIC "${install_dir}/include")
+add_library(judy_shared SHARED IMPORTED)
+set_property(TARGET judy PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libJudy${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_property(TARGET judy_shared PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libJudy${CMAKE_SHARED_LIBRARY_SUFFIX})
+target_include_directories(bft PUBLIC "${install_dir}/include")
 
-add_dependencies(bft judy)
-add_dependencies(bft_static judy)
-target_link_libraries(bft_bin judy)
-target_link_libraries(bft_static judy)
-target_link_libraries(bft_shared judy)
+add_dependencies(bft project_judy)
 
 # Jemalloc
 set(PROJECT_JEMALLOC_PATH ${CMAKE_BINARY_DIR}/jemalloc-5.1.0)
@@ -70,17 +65,17 @@ ExternalProject_Add(project_jemalloc
   PREFIX ${PROJECT_JEMALLOC_PATH}
   CONFIGURE_COMMAND ${PROJECT_JEMALLOC_PATH}/src/project_jemalloc/configure --prefix=${PROJECT_JEMALLOC_PATH}
   BUILD_IN_SOURCE TRUE
-  BUILD_COMMAND ${MAKE}
-)
+  BUILD_COMMAND ${MAKE})
 ExternalProject_Get_Property(project_jemalloc install_dir)
 add_library(jemalloc STATIC IMPORTED)
-set_property(TARGET jemalloc PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc.a)
-set_property(TARGET jemalloc PROPERTY POSITION_INDEPENDENT_CODE ON)
-include_directories(bft PUBLIC "${install_dir}/include")
+add_library(jemalloc_shared SHARED IMPORTED)
+set_property(TARGET jemalloc PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc${CMAKE_STATIC_LIBRARY_SUFFIX})
+set_property(TARGET jemalloc PROPERTY INTERFACE_LINK_LIBRARIES pthread dl)
+set_property(TARGET jemalloc_shared PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc${CMAKE_SHARED_LIBRARY_SUFFIX})
+target_include_directories(bft PUBLIC "${install_dir}/include")
 
-add_dependencies(bft jemalloc)
-add_dependencies(bft_static jemalloc)
-target_link_libraries(bft_bin jemalloc)
-target_link_libraries(bft_static jemalloc)
-target_link_libraries(bft_shared jemalloc)
+add_dependencies(bft project_jemalloc)
+target_link_libraries(bft_bin m judy jemalloc)
+target_link_libraries(bft_static m judy jemalloc)
+target_link_libraries(bft_shared m judy_shared jemalloc_shared)
 
