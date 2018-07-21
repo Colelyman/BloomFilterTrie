@@ -53,7 +53,7 @@ add_library(judy STATIC IMPORTED)
 add_library(judy_shared SHARED IMPORTED)
 set_property(TARGET judy PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libJudy${CMAKE_STATIC_LIBRARY_SUFFIX})
 set_property(TARGET judy_shared PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libJudy${CMAKE_SHARED_LIBRARY_SUFFIX})
-target_include_directories(bft PUBLIC "${install_dir}/include")
+include_directories(bft "${install_dir}/include/")
 
 add_dependencies(bft project_judy)
 
@@ -72,7 +72,7 @@ add_library(jemalloc_shared SHARED IMPORTED)
 set_property(TARGET jemalloc PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc${CMAKE_STATIC_LIBRARY_SUFFIX})
 set_property(TARGET jemalloc PROPERTY INTERFACE_LINK_LIBRARIES pthread dl)
 set_property(TARGET jemalloc_shared PROPERTY IMPORTED_LOCATION ${install_dir}/lib/libjemalloc${CMAKE_SHARED_LIBRARY_SUFFIX})
-target_include_directories(bft PUBLIC "${install_dir}/include")
+include_directories(bft "${install_dir}/include")
 
 add_dependencies(bft project_jemalloc)
 target_link_libraries(bft_bin m judy jemalloc)
